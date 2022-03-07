@@ -1,7 +1,5 @@
-package Lab_2.Ex_1;
+package Lab_2.Ex1;
 
-import java.io.IOException;
-import java.io.Reader;
 import java.util.Scanner;
 
 public class Ex1 {
