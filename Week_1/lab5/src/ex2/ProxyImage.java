@@ -2,22 +2,22 @@ package ex2;
 
 public class ProxyImage implements Image{
 
-    private Image object;
+    private Image image;
     private String fileName;
 
-    public ProxyImage(String fileName,Image object){
+    public ProxyImage(String fileName,Image image){
         this.fileName = fileName;
-        this.object = object;
+        this.image = image;
     }
 
     @Override
     public void display() {
-        if(object.getClass() == RealImage.class){
-            RealImage realImage = (RealImage)object;
+        if(image.getClass() == RealImage.class){
+            RealImage realImage = (RealImage)image;
             realImage.display();
         }
-        else if(object.getClass() == RotatedImage.class){
-            RotatedImage rotatedImage = (RotatedImage) object;
+        else if(image.getClass() == RotatedImage.class){
+            RotatedImage rotatedImage = (RotatedImage) image;
             rotatedImage.display();
         }
     }
