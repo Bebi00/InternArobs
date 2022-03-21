@@ -18,8 +18,9 @@ public class VisitorCountFilter implements Filter {
 
         visitCounter.incrementAndGet();
         servletRequest.setAttribute("visitCounter", visitCounter);
-        RequestDispatcher requestDispatcher =servletRequest.getRequestDispatcher("login");
-        requestDispatcher.forward(servletRequest, servletResponse);
+        filterChain.doFilter(servletRequest, servletResponse);
+//        RequestDispatcher requestDispatcher =servletRequest.getRequestDispatcher("login");
+//        requestDispatcher.forward(servletRequest, servletResponse);
 
     }
 

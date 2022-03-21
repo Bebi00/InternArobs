@@ -10,6 +10,6 @@ import java.io.IOException;
 public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("src/main/VisitorCount.jsp").forward(req,resp);
+        req.getRequestDispatcher("/VisitorCount.jsp").forward(req,resp);
     }
 }

@@ -1,0 +1,2 @@
+SELECT albumName from albums as A JOIN artist as Ar ON A.artistsId=Ar.artistId WHERE artistFirstName = "Marshall";
+SELECT songName,artistLastName from songs S JOIN artist Ar JOIN albums_songs AlSo JOIN albums Al ON Al.idAlbums = AlSo.albumID AND S.idSongs = AlSo.songID AND Al.artistsId = Ar.artistId;

@@ -22,8 +22,8 @@ public class Login extends HttpServlet {
                 </head>
                 <body>
                     <form method="post" resource="/login">
-                       Username: <input type="text" name="Username">
-                       <br> Password:  <input type="Password" name="Password">
+                       Username: <input type="text" name="user">
+                       <br> Password:  <input type="Password" name="pass">
                         <br> <button>Login</button>
                     </form>
                 </body>
