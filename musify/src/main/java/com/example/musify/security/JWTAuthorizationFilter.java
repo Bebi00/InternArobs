@@ -1,5 +1,8 @@
 package com.example.musify.security;
 
+import io.swagger.models.auth.In;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +25,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
 
+
+    private final Logger log= LoggerFactory.getLogger(JWTAuthorizationFilter.class);
     @Autowired
     JWTUtils jwtUtils;
 
@@ -35,6 +40,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String header = req.getHeader(HEADER_STRING);
 
         if (header == null || !header.startsWith(TOKEN_PREFIX)) {
+
             chain.doFilter(req, res);
             return;
         }
@@ -52,7 +58,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
             List<Object> userInfo = jwtUtils.validateToken(token);
             Integer userId = (Integer) userInfo.get(0);
-            String role = (String) userInfo.get(1);
+            Integer role = (Integer) userInfo.get(1);
             String email = (String) userInfo.get(2);
 
             if (userId != null && role != null && email != null) {

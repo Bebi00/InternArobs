@@ -29,8 +29,8 @@ public class UsersController {
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
     @PostMapping("/logout")
-    public ResponseEntity<Boolean> logout(){
-        boolean completed = userService.logoutUser();
-        return new ResponseEntity<>(completed, HttpStatus.OK);
+    public ResponseEntity<Boolean> logout(@RequestHeader(name = "Authorization") String header) { // 'Authorization: Bearer tokenString'
+        Boolean response = userService.logoutUser(header);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

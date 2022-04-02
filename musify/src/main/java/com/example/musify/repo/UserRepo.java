@@ -7,6 +7,8 @@ import com.example.musify.entities.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,5 +63,21 @@ public class UserRepo implements DAO<User> {
         String sql = String.format("SELECT * from musify.users WHERE email='%s'",userDTO.getEmail());
         User user = jdbcTemplate.query(sql,new UserRowMapper()).get(0);
         return user.getId();
+    }
+
+    public String removeToken(String token){
+        String sql = String.format("DELETE from musify.tokens WHERE token='%s'",token);
+        jdbcTemplate.update(sql);
+        return token;
+    }
+
+    public String addToken(String token,int id, Date expiryDate){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = sdf.format(expiryDate);
+        String sql = String.format("INSERT INTO musify.tokens (user_id,token,expiry_date) VALUES ('%d','%s','%s')",id,token,date);
+        jdbcTemplate.update(sql);
+        sql = "DELETE FROM `musify`.`tokens` WHERE expiry_date <= NOW()";
+        jdbcTemplate.update(sql);
+        return token;
     }
 }

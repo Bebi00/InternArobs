@@ -25,4 +25,9 @@ public class UserMapperImpl implements UserMapper{
         Integer id = userRepo.getId(userDTO);
         return new User(id,userDTO.getFirstName(),userDTO.getLastName(),userDTO.getEmail(),userDTO.getPassword(),userDTO.getCountryOfOrigin());
     }
+
+    @Override
+    public User toNewEntity(UserDTO userDTO) {
+        return new User(0,userDTO.getFirstName(),userDTO.getLastName(),userDTO.getEmail(),userDTO.getPassword(),userDTO.getCountryOfOrigin());
+    }
 }

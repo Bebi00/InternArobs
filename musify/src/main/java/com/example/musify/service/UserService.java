@@ -2,21 +2,24 @@ package com.example.musify.service;
 
 import com.example.musify.dto.UserDTO;
 import com.example.musify.entities.User;
+
 import com.example.musify.security.JWTUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 import com.example.musify.repo.UserRepo;
 
-import javax.swing.text.StyledEditorKit;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 
 public class UserService {
+
     private final UserRepo userRepo;
     private final UserMapper userMapper;
 
@@ -35,9 +38,9 @@ public class UserService {
     }
 
     public UserDTO registerUser(UserDTO userDTO) {
-        User user = userMapper.toEntity(userDTO);
-        userRepo.save(user);
-        return userDTO;
+        User user = userMapper.toNewEntity(userDTO);
+        UserDTO newUserDTO = userMapper.toDTO(userRepo.save(user));
+        return newUserDTO;
     }
 
     public String loginUser(UserDTO userDTO) {
@@ -46,16 +49,20 @@ public class UserService {
         User user2 = userRepo.getByEmail(userDTO.getEmail()).get();
 
         if (user1.getEmail().equals(user2.getEmail()) && user1.getPassword().equals(user2.getPassword())) {
-            return jwtUtils.generateToken(user1.getId(), user1.getRole(), user1.getEmail());
+
+            Object[] jwtInfo = jwtUtils.generateToken(user1.getId(), user1.getRole(), user1.getEmail());
+            String token = jwtInfo[0].toString();
+            Date expiryDate = (Date) jwtInfo[1];
+            userRepo.addToken(token, user2.getId(), expiryDate);
+            return token;
         }
 
         return null;
     }
 
-    public Boolean logoutUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<Object> userInfo = (List<Object>) authentication.getPrincipal();
-        System.out.println(userInfo);
+    public Boolean logoutUser(String header) {
+        String token = jwtUtils.getToken(header);
+        userRepo.removeToken(token);
         return true;
     }
 
