@@ -1,15 +1,17 @@
-package com.example.musify.repo;
+package com.example.musify.dto;
+
+import com.example.musify.entities.User;
 
 import java.util.Collection;
 import java.util.Optional;
 
 public interface DAO<T> {
 
-    Optional<T> get(int id);
+    Optional<User> getById(int id);
 
     Collection<T> getAll();
 
-    int save(T t);
+    T save(T t);
 
     void update(T t);
 

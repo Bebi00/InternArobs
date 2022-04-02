@@ -1,7 +1,8 @@
-package com.example.musify;
+package com.example.musify.controllers;
 
-import com.example.musify.repo.User;
+import com.example.musify.dto.UserDTO;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.musify.service.UserService;
@@ -10,10 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class UserController {
+@RequestMapping("/user")
+public class UserControllerTest {
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserControllerTest(UserService userService) {
         this.userService = userService;
     }
 
@@ -23,12 +25,12 @@ public class UserController {
     }
 
     @GetMapping("/allUsers")
-    public List<User> getAll(){
+    public List<UserDTO> getAll(){
         return userService.getAll();
     }
 
     @GetMapping("/getUser")
-    public Optional<User> getByID(@RequestParam Integer id){
+    public Optional<UserDTO> getByID(@RequestParam Integer id){
         return userService.get(id);
     }
 }

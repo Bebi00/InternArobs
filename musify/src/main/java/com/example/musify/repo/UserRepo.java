@@ -1,5 +1,9 @@
 package com.example.musify.repo;
 
+import com.example.musify.dto.DAO;
+import com.example.musify.dto.UserDTO;
+import com.example.musify.dto.UserRowMapper;
+import com.example.musify.entities.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
@@ -15,24 +19,32 @@ public class UserRepo implements DAO<User> {
     }
 
     @Override
-    public Optional<User> get(int id) {
+    public Optional<User> getById(int id) {
         User user;
         String sql = "SELECT * from users WHERE id="+id;
-        user = jdbcTemplate.query(sql,new UserMapper()).get(0);
+        user = jdbcTemplate.query(sql,new UserRowMapper()).get(0);
+        return Optional.of(user);
+    }
+    public Optional<User> getByEmail(String email) {
+        User user;
+        String sql = String.format("SELECT * from musify.users WHERE email='%s'",email);
+
+        user = jdbcTemplate.query(sql,new UserRowMapper()).get(0);
         return Optional.of(user);
     }
 
     @Override
     public List<User> getAll() {
         List<User> users;
-        users= jdbcTemplate.query("SELECT * from users",new UserMapper());
+        users= jdbcTemplate.query("SELECT * from users",new UserRowMapper());
         return users;
     }
 
     @Override
-    public int save(User user) {
-        jdbcTemplate.update("INSERT INTO users (firstName,lastName) VALUES (?,?)",user.getFirstName(),user.getLastName());
-        return 0;
+    public User save(User user) {
+        String sql = String.format("INSERT INTO musify.users (first_name,last_name,email,password,country_of_origin,role) VALUES ('%s','%s','%s','%s','%s',%d)",user.getFirstName(),user.getLastName(),user.getEmail(),user.getPassword(),user.getCountryOfOrigin(),0);
+        jdbcTemplate.update(sql);
+        return user;
     }
 
     @Override
@@ -43,5 +55,11 @@ public class UserRepo implements DAO<User> {
     @Override
     public void delete(User user) {
 
+    }
+
+    public Integer getId(UserDTO userDTO){
+        String sql = String.format("SELECT * from musify.users WHERE email='%s'",userDTO.getEmail());
+        User user = jdbcTemplate.query(sql,new UserRowMapper()).get(0);
+        return user.getId();
     }
 }
