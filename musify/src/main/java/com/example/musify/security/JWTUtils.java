@@ -44,7 +44,7 @@ public class JWTUtils {
         Calendar c = Calendar.getInstance();
         Date currentDate = c.getTime();
 
-        c.add(Calendar.MINUTE, 1);
+        c.add(Calendar.HOUR, 1);
         Date expireDate = c.getTime();
 
         String token = JWT.create()

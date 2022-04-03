@@ -23,10 +23,24 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(TokenExpiredException.class)
     protected ResponseEntity<Object> handleTokenExpiredException(TokenExpiredException e) {
         ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, e.getMessage());
-        log.error("Expired TOKEN");
+        log.error("Expired TOKEN: "+ e.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    protected ResponseEntity<Object> handleInvalidTokenException(InvalidTokenException e){
+        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, e.getMessage());
+        log.error("Invalid Token:"+ e.getMessage() );
+        return new ResponseEntity<>(apiError,HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(InvalidUserException.class)
+    protected ResponseEntity<Object> handleInvalidUserException(InvalidUserException e){
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
+        log.error("User with the given id was not found.");
+        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
     }
 }

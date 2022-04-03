@@ -33,4 +33,10 @@ public class UsersController {
         Boolean response = userService.logoutUser(header);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PostMapping("/setAdmin")
+    public ResponseEntity<UserDTO> setAdmin(@RequestParam int id){
+        UserDTO changedUser = userService.setAdmin(userService.get(id));
+        return new ResponseEntity<>(changedUser,HttpStatus.OK);
+    }
 }

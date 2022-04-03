@@ -1,5 +1,8 @@
 package com.example.musify.security;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.example.musify.exceptions.InvalidTokenException;
+import com.example.musify.repo.UserRepo;
 import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +29,12 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     public static final String HEADER_STRING = "Authorization";
 
 
-    private final Logger log= LoggerFactory.getLogger(JWTAuthorizationFilter.class);
+    private final Logger log = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
     @Autowired
     JWTUtils jwtUtils;
+
+    @Autowired
+    UserRepo userRepo;
 
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -39,13 +45,23 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             throws ServletException, IOException {
         String header = req.getHeader(HEADER_STRING);
 
+        String token;
         if (header == null || !header.startsWith(TOKEN_PREFIX)) {
-
             chain.doFilter(req, res);
             return;
+        } else {
+            token = header.replaceAll(TOKEN_PREFIX, "").trim();
+        }
+        if (!userRepo.checkToken(token)) {
+            chain.doFilter(req, res);
+            try {
+                throw new InvalidTokenException("Token is not valid");
+            } catch (InvalidTokenException e) {
+                e.printStackTrace();
+            }
         }
 
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(header);
+        UsernamePasswordAuthenticationToken authentication = getAuthentication(token);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(req, res);
@@ -53,22 +69,19 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     // Reads the JWT from the Authorization header, and then uses JWT to validate the token
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
-        if (token != null) {
-            token = token.replaceAll(TOKEN_PREFIX, "").trim();
 
-            List<Object> userInfo = jwtUtils.validateToken(token);
-            Integer userId = (Integer) userInfo.get(0);
-            Integer role = (Integer) userInfo.get(1);
-            String email = (String) userInfo.get(2);
 
-            if (userId != null && role != null && email != null) {
-                // new arraylist means authorities
-                return new UsernamePasswordAuthenticationToken(userInfo, null, new ArrayList<>());
-            }
+        List<Object> userInfo = jwtUtils.validateToken(token);
+        Integer userId = (Integer) userInfo.get(0);
+        Integer role = (Integer) userInfo.get(1);
+        String email = (String) userInfo.get(2);
 
-            return null;
+        if (userId != null && role != null && email != null) {
+            // new arraylist means authorities
+            return new UsernamePasswordAuthenticationToken(userInfo, null, new ArrayList<>());
         }
 
         return null;
     }
+
 }

@@ -29,8 +29,8 @@ public class UserControllerTest {
         return userService.getAll();
     }
 
-    @GetMapping("/getUser")
-    public Optional<UserDTO> getByID(@RequestParam Integer id){
-        return userService.get(id);
-    }
+//    @GetMapping("/getUser")
+//    public Optional<UserDTO> getByID(@RequestParam Integer id){
+//        return userService.get(id);
+//    }
 }

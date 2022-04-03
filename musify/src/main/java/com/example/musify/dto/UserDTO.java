@@ -3,7 +3,7 @@ package com.example.musify.dto;
 import javax.validation.constraints.NotBlank;
 
 public class UserDTO {
-    private Integer id=0;
+    private Integer id;
     private String firstName;
     private String lastName;
     @NotBlank(message = "Email cannot be blank")
@@ -11,14 +11,16 @@ public class UserDTO {
     @NotBlank(message = "Password cannot be blank")
     private String password;
     private String countryOfOrigin;
-    private int role=0;
+    private int role;
 
-    public UserDTO(String firstName, String lastName, String email, String password, String countryOfOrigin) {
+    public UserDTO(Integer id,String firstName, String lastName, String email, String password, String countryOfOrigin,int role) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.countryOfOrigin = countryOfOrigin;
+        this.role=role;
     }
 
     public UserDTO() {

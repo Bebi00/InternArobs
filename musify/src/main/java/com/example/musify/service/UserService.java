@@ -3,15 +3,20 @@ package com.example.musify.service;
 import com.example.musify.dto.UserDTO;
 import com.example.musify.entities.User;
 
+
+import com.example.musify.exceptions.InvalidUserException;
+import com.example.musify.exceptions.UnauthorizedException;
 import com.example.musify.security.JWTUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.example.musify.repo.UserRepo;
 
 
-import java.text.SimpleDateFormat;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -44,13 +49,23 @@ public class UserService {
     }
 
     public String loginUser(UserDTO userDTO) {
-
         User user1 = userMapper.toEntity(userDTO);
-        User user2 = userRepo.getByEmail(userDTO.getEmail()).get();
+        Optional<User> dbUser = userRepo.getByEmail(user1.getEmail());
+        User user2 = null;
+        if (dbUser.isPresent()) {
+            user2 = dbUser.get();
+        }else {
+            try {
+                throw new InvalidUserException("User was not found");
+            } catch (InvalidUserException e) {
+                e.printStackTrace();
+            }
+        }
 
+
+        assert user2 != null;
         if (user1.getEmail().equals(user2.getEmail()) && user1.getPassword().equals(user2.getPassword())) {
-
-            Object[] jwtInfo = jwtUtils.generateToken(user1.getId(), user1.getRole(), user1.getEmail());
+            Object[] jwtInfo = jwtUtils.generateToken(user2.getId(), user2.getRole(), user2.getEmail());
             String token = jwtInfo[0].toString();
             Date expiryDate = (Date) jwtInfo[1];
             userRepo.addToken(token, user2.getId(), expiryDate);
@@ -67,7 +82,18 @@ public class UserService {
     }
 
     public UserDTO setAdmin(UserDTO userDTO) {
-        return null;
+        List<Object> userInfo = (List<Object>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User newUser = null;
+        if ((Integer) userInfo.get(1) == 1) {
+           newUser = userRepo.setRole(userDTO,1);
+        }else{
+            try {
+                throw new UnauthorizedException("User does not have permission.");
+            } catch (UnauthorizedException e) {
+                e.printStackTrace();
+            }
+        }
+        return userMapper.toDTO(newUser);
     }
 
     public List<UserDTO> getAll() {
@@ -75,8 +101,33 @@ public class UserService {
         return null;
     }
 
-    public Optional<UserDTO> get(int id) {
-        // return userRepo.get(id);
+    public UserDTO get(int id) {
+        Optional<User> user;
+        user = userRepo.getById(id);
+        if (user.isPresent()) {
+            return userMapper.toDTO(user.get());
+        } else {
+            try {
+                throw new InvalidUserException("User was not found");
+            } catch (InvalidUserException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public UserDTO getByEmail(String email) {
+        Optional<User> user;
+        user = userRepo.getByEmail(email);
+        if (user.isPresent()) {
+            return userMapper.toDTO(user.get());
+        } else {
+            try {
+                throw new InvalidUserException("User was not found");
+            } catch (InvalidUserException e) {
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 

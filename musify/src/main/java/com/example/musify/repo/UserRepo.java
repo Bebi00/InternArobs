@@ -1,6 +1,7 @@
 package com.example.musify.repo;
 
 import com.example.musify.dto.DAO;
+import com.example.musify.dto.TokenRowMapper;
 import com.example.musify.dto.UserDTO;
 import com.example.musify.dto.UserRowMapper;
 import com.example.musify.entities.User;
@@ -22,16 +23,24 @@ public class UserRepo implements DAO<User> {
 
     @Override
     public Optional<User> getById(int id) {
-        User user;
-        String sql = "SELECT * from users WHERE id="+id;
-        user = jdbcTemplate.query(sql,new UserRowMapper()).get(0);
+        User user = null;
+        String sql = "SELECT * from musify.users WHERE id="+id;
+        List<User> users = jdbcTemplate.query(sql,new UserRowMapper());
+        if (users.size() == 1){
+            user = users.get(0);
+        }
+        assert user != null;
         return Optional.of(user);
     }
     public Optional<User> getByEmail(String email) {
-        User user;
+        User user = null;
         String sql = String.format("SELECT * from musify.users WHERE email='%s'",email);
 
-        user = jdbcTemplate.query(sql,new UserRowMapper()).get(0);
+        List<User> users = jdbcTemplate.query(sql,new UserRowMapper());
+        if (users.size() == 1){
+            user = users.get(0);
+        }
+        assert user != null;
         return Optional.of(user);
     }
 
@@ -51,8 +60,17 @@ public class UserRepo implements DAO<User> {
 
     @Override
     public void update(User user) {
-
     }
+
+    public User setRole(UserDTO userDTO,int role){
+        String sql = String.format("UPDATE musify.users SET role = '%d' WHERE id='%d'",role,userDTO.getId());
+        jdbcTemplate.update(sql);
+        sql = String.format("SELECT * from musify.users WHERE id='%d'",userDTO.getId());
+        User user = jdbcTemplate.query(sql,new UserRowMapper()).get(0);
+        return user;
+    }
+
+
 
     @Override
     public void delete(User user) {
@@ -79,5 +97,16 @@ public class UserRepo implements DAO<User> {
         sql = "DELETE FROM `musify`.`tokens` WHERE expiry_date <= NOW()";
         jdbcTemplate.update(sql);
         return token;
+    }
+
+    public boolean checkToken(String token){
+        String sql = String.format("SELECT token FROM `musify`.`tokens` WHERE token = '%s' ",token);
+        List<String> res = jdbcTemplate.query(sql,new TokenRowMapper());
+        String dbToken = null;
+        if(res.size() > 0){
+            dbToken = res.get(0);
+        }
+        return token.equals(dbToken);
+
     }
 }

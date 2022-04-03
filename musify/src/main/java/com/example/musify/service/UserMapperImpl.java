@@ -17,17 +17,17 @@ public class UserMapperImpl implements UserMapper{
 
     @Override
     public UserDTO toDTO(User user) {
-        return new UserDTO(user.getFirstName(),user.getLastName(),user.getEmail(),user.getPassword(),user.getCountryOfOrigin());
+        return new UserDTO(user.getId(),user.getFirstName(),user.getLastName(),user.getEmail(),user.getPassword(),user.getCountryOfOrigin(),user.getRole());
     }
 
     @Override
     public User toEntity(UserDTO userDTO) {
         Integer id = userRepo.getId(userDTO);
-        return new User(id,userDTO.getFirstName(),userDTO.getLastName(),userDTO.getEmail(),userDTO.getPassword(),userDTO.getCountryOfOrigin());
+        return new User(id,userDTO.getFirstName(),userDTO.getLastName(),userDTO.getEmail(),userDTO.getPassword(),userDTO.getCountryOfOrigin(),userDTO.getRole());
     }
 
     @Override
     public User toNewEntity(UserDTO userDTO) {
-        return new User(0,userDTO.getFirstName(),userDTO.getLastName(),userDTO.getEmail(),userDTO.getPassword(),userDTO.getCountryOfOrigin());
+        return new User(0,userDTO.getFirstName(),userDTO.getLastName(),userDTO.getEmail(),userDTO.getPassword(),userDTO.getCountryOfOrigin(),userDTO.getRole());
     }
 }
