@@ -43,4 +43,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("User with the given id was not found.");
         return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InvalidArtistException.class)
+    protected ResponseEntity<Object> handleInvalidArtistException(InvalidUserException e){
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
+        log.error("Artist with the given id was not found.");
+        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+    }
 }

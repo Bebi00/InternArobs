@@ -24,7 +24,7 @@ public class User {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
-    @JoinTable(name = "playlists",
+    @JoinTable(name = "users_playlists",
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "playlist_id"))
     private Set<Playlist> playlists =new HashSet<>();
@@ -34,7 +34,7 @@ public class User {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-
+    private List<Token> tokens = new ArrayList<>();
 
     public void addPlaylist(Playlist playlist){
         playlists.add(playlist);
@@ -45,7 +45,7 @@ public class User {
         playlists.remove(playlist);
         playlist.getUsers().remove(this);
     }
-    private List<Token> tokens = new ArrayList<>();
+
 
     public User(Integer id,String firstName, String lastName, String email, String password, String countryOfOrigin,int role) {
         this.id = id;

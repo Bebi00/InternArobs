@@ -1,6 +1,7 @@
 package com.example.musify.entities;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,22 +15,37 @@ public class Band {
     private long bandId;
     private String bandName;
     private String location;
+    private java.sql.Date startDateActivePeriod;
+    private java.sql.Date endDateActivePeriod;
 
     @ManyToMany(mappedBy = "bands")
-    private Set<SoloArtist> soloArtists = new HashSet<>();
+    private Set<Artist> artists = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Artist artist;
+    @ManyToMany(mappedBy = "bands")
+    private Set<Album> albums = new HashSet<>();
 
-    public Band(long id, long bandId, String bandName, String location) {
+    @ManyToMany(mappedBy = "bands")
+    private Set<Song> songs = new HashSet<>();
+
+    public Band(long id, long bandId, String bandName, String location, Date startDateActivePeriod, Date endDateActivePeriod) {
         this.id = id;
         this.bandId = bandId;
         this.bandName = bandName;
         this.location = location;
+        this.startDateActivePeriod = startDateActivePeriod;
+        this.endDateActivePeriod = endDateActivePeriod;
     }
 
-    public Set<SoloArtist> getSoloArtists() {
-        return soloArtists;
+    public Set<Artist> getArtists() {
+        return artists;
+    }
+
+    public Set<Album> getAlbums() {
+        return albums;
+    }
+
+    public Set<Song> getSongs() {
+        return songs;
     }
 
     public long getId() {

@@ -24,8 +24,8 @@ public class Song {
             CascadeType.MERGE
     })
     @JoinTable(name = "songs_albums",
-    joinColumns = @JoinColumn(name = "song_id"),
-    inverseJoinColumns = @JoinColumn(name = "album_id"))
+            joinColumns = @JoinColumn(name = "song_id"),
+            inverseJoinColumns = @JoinColumn(name = "album_id"))
     private Set<Album> albums = new HashSet<>();
 
     @ManyToMany(cascade = {
@@ -33,8 +33,8 @@ public class Song {
             CascadeType.MERGE
     })
     @JoinTable(name = "songs_playlists",
-    joinColumns = @JoinColumn(name = "song_id"),
-    inverseJoinColumns = @JoinColumn(name = "playlist_id"))
+            joinColumns = @JoinColumn(name = "song_id"),
+            inverseJoinColumns = @JoinColumn(name = "playlist_id"))
     private Set<Playlist> playlists = new HashSet<>();
 
     @OneToMany(
@@ -48,41 +48,60 @@ public class Song {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
-    @JoinTable(name = "artists",
-    joinColumns = @JoinColumn(name = "song_id"),
-    inverseJoinColumns = @JoinColumn(name = "artist_id"))
+    @JoinTable(name = "artists_songs",
+            joinColumns = @JoinColumn(name = "song_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id"))
     private Set<Artist> artists = new HashSet<>();
 
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "artists_songs",
+            joinColumns = @JoinColumn(name = "song_id"),
+            inverseJoinColumns = @JoinColumn(name = "band_id"))
+    private Set<Band> bands = new HashSet<>();
 
-    public void addArtist(Artist artist){
+
+    public void addArtist(Artist artist) {
         artists.add(artist);
         artist.getSongs().add(this);
     }
 
-    public void removeArtist(Artist artist){
+    public void removeArtist(Artist artist) {
         artists.remove(artist);
         artist.getSongs().remove(this);
     }
 
-    public void addPlaylist(Playlist playlist){
+    public void addBand(Band band) {
+        bands.add(band);
+        band.getSongs().add(this);
+    }
+
+    public void removeBand(Band band) {
+        bands.remove(band);
+        band.getSongs().remove(this);
+    }
+
+    public void addPlaylist(Playlist playlist) {
         playlists.add(playlist);
         playlist.getSongs().add(this);
     }
 
-    public void removePlaylist(Playlist playlist){
+    public void removePlaylist(Playlist playlist) {
         playlists.remove(playlist);
         playlist.getSongs().remove(this);
     }
-    public void addAlbum(Album album){
+
+    public void addAlbum(Album album) {
         albums.add(album);
         album.getSongs().add(this);
     }
 
-    public void removeAlbum(Album album){
+    public void removeAlbum(Album album) {
         albums.remove(album);
         album.getSongs().remove(this);
     }
-
 
 
     public Song(long id, String title, long contributorArtists, long album, long duration, Date creationDate) {
