@@ -1,13 +1,11 @@
 package com.example.musify;
 
-
-import com.example.musify.hibernate.HibernateUtil;
 import com.example.musify.security.JWTUtils;
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +20,17 @@ public class MusifyApplication {
 	private final Logger log=LoggerFactory.getLogger(MusifyApplication.class);
 
 	@Autowired
-	private JWTUtils jwtUtils;
+	private final JWTUtils jwtUtils;
 
 
 
 	@Value("${spring.datasource.url}")
 	private String sqlURL;
+
+	public MusifyApplication(JWTUtils jwtUtils) {
+		this.jwtUtils = jwtUtils;
+	}
+
 
 	public static void main(String[] args) {
 
