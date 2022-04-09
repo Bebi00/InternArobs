@@ -1,7 +1,6 @@
 package com.example.musify;
 
 import com.example.musify.security.JWTUtils;
-
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -19,14 +18,12 @@ import org.springframework.context.annotation.Bean;
 public class MusifyApplication {
 	private final Logger log=LoggerFactory.getLogger(MusifyApplication.class);
 
-	@Autowired
-	private final JWTUtils jwtUtils;
-
-
+	private JWTUtils jwtUtils;
 
 	@Value("${spring.datasource.url}")
 	private String sqlURL;
 
+	@Autowired
 	public MusifyApplication(JWTUtils jwtUtils) {
 		this.jwtUtils = jwtUtils;
 	}
@@ -53,6 +50,9 @@ public class MusifyApplication {
 								)
 				);
 	}
+
+
+
 
 
 }

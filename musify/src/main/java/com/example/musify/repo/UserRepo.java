@@ -6,6 +6,7 @@ import com.example.musify.dto.UserDTO;
 import com.example.musify.dto.UserRowMapper;
 import com.example.musify.entities.User;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Component
 public class UserRepo implements DAO<User> {
     private final JdbcTemplate jdbcTemplate;
 

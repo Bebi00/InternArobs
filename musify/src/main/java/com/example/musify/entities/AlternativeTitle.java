@@ -9,18 +9,21 @@ public class AlternativeTitle {
   @Id
   @GeneratedValue
   private long id;
-  private long songId;
+
   private String alternativeTitle;
   private String language;
 
   @ManyToOne(fetch = FetchType.LAZY)
   private Song song;
 
-  public AlternativeTitle(long id, long songId, String alternativeTitle, String language) {
+  public AlternativeTitle(long id, String alternativeTitle, String language) {
     this.id = id;
-    this.songId = songId;
     this.alternativeTitle = alternativeTitle;
     this.language = language;
+  }
+
+  public AlternativeTitle() {
+
   }
 
   public long getId() {
@@ -32,13 +35,6 @@ public class AlternativeTitle {
   }
 
 
-  public long getSongId() {
-    return songId;
-  }
-
-  public void setSongId(long songId) {
-    this.songId = songId;
-  }
 
 
   public String getAlternativeTitle() {

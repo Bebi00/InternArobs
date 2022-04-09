@@ -1,11 +1,13 @@
 package com.example.musify.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ApiError {
     private LocalDateTime timeStamp;
     private HttpStatus status;

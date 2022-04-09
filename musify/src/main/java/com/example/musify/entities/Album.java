@@ -28,10 +28,7 @@ public class Album {
     })
     @JoinTable(name = "artists_albums",
             joinColumns = @JoinColumn(name = "album_id"),
-            inverseJoinColumns = {
-                    @JoinColumn(name = "artist_id")
-                    //, @JoinColumn(name = "band_id")
-            })
+            inverseJoinColumns = @JoinColumn(name = "artist_id"))
     private Set<Artist> artists = new HashSet<>();
 
     @ManyToMany(cascade = {
@@ -40,9 +37,7 @@ public class Album {
     })
     @JoinTable(name = "artists_albums",
             joinColumns = @JoinColumn(name = "album_id"),
-            inverseJoinColumns = {
-            @JoinColumn(name = "band_id")
-            })
+            inverseJoinColumns = @JoinColumn(name = "band_id"))
     private Set<Band> bands = new HashSet<>();
 
     public Album() {

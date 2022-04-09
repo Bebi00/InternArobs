@@ -10,16 +10,15 @@ public class Token {
   @Id
   @GeneratedValue
   private long tokenId;
-  private long userId;
+
   private String token;
   private java.sql.Timestamp expiryDate;
 
   @ManyToOne(fetch = FetchType.LAZY)
   private User user;
 
-  public Token(long tokenId, long userId, String token, Timestamp expiryDate) {
+  public Token(long tokenId, String token, Timestamp expiryDate) {
     this.tokenId = tokenId;
-    this.userId = userId;
     this.token = token;
     this.expiryDate = expiryDate;
   }
@@ -30,15 +29,6 @@ public class Token {
 
   public void setTokenId(long tokenId) {
     this.tokenId = tokenId;
-  }
-
-
-  public long getUserId() {
-    return userId;
-  }
-
-  public void setUserId(long userId) {
-    this.userId = userId;
   }
 
 

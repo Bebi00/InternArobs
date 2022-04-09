@@ -6,12 +6,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "musify.artists")
+@Table(name = "artists")
 public class Artist{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -62,7 +62,7 @@ public class Artist{
     }
 
 
-    public Artist(int id, String firstName, String lastName, String stageName, Date birthday, Date startDateActivePeriod, Date endDateActivePeriod) {
+    public Artist(Long id, String firstName, String lastName, String stageName, Date birthday, Date startDateActivePeriod, Date endDateActivePeriod) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -80,11 +80,11 @@ public class Artist{
         return albums;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

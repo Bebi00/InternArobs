@@ -1,13 +1,12 @@
 package com.example.musify.security;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
+
 import com.example.musify.exceptions.InvalidTokenException;
 import com.example.musify.repo.UserRepo;
-import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,21 +19,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
+@ComponentScan({"com.example.musify.repo"})
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
 
 
     private final Logger log = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
-    @Autowired
-    JWTUtils jwtUtils;
 
+     private JWTUtils jwtUtils;
+     private UserRepo userRepo;
     @Autowired
-    UserRepo userRepo;
+    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtils jwtUtils,UserRepo userRepo) {
+        super(authenticationManager);
+        this.jwtUtils = jwtUtils;
+        this.userRepo = userRepo;
+    }
 
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);

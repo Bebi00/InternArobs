@@ -1,7 +1,10 @@
 package com.example.musify.dto;
 
+import org.springframework.stereotype.Component;
+
 import java.sql.Date;
 
+@Component
 public class ArtistDTO {
 
   private long id;

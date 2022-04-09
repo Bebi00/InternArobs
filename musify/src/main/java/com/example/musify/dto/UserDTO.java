@@ -1,7 +1,10 @@
 package com.example.musify.dto;
 
+import org.springframework.stereotype.Component;
+
 import javax.validation.constraints.NotBlank;
 
+@Component
 public class UserDTO {
     private Integer id;
     private String firstName;

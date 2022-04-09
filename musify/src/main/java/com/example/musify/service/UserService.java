@@ -8,6 +8,7 @@ import com.example.musify.exceptions.InvalidUserException;
 import com.example.musify.exceptions.UnauthorizedException;
 import com.example.musify.security.JWTUtils;
 
+import com.example.musify.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,14 +16,11 @@ import org.springframework.stereotype.Service;
 import com.example.musify.repo.UserRepo;
 
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-
 public class UserService {
 
     private final UserRepo userRepo;
@@ -32,9 +30,9 @@ public class UserService {
     JWTUtils jwtUtils;
 
     @Autowired
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo,UserMapper userMapper) {
         this.userRepo = userRepo;
-        this.userMapper = new UserMapperImpl(userRepo);
+        this.userMapper = userMapper;
     }
 
     public void addUser(String firstName, String lastName) {
