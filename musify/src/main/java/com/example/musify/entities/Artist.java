@@ -26,18 +26,12 @@ public class Artist{
     private java.sql.Date birthday;
 
     @Column(name = "start_date_active_period")
-    private java.sql.Date startDateActivePeriod;
+    private String startDateActivePeriod;
 
     @Column(name = "end_date_active_period")
-    private java.sql.Date endDateActivePeriod;
+    private String endDateActivePeriod;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(name = "band_artists",
-            joinColumns = @JoinColumn(name = "artist_id"),
-            inverseJoinColumns = @JoinColumn(name = "band_id"))
+   @ManyToMany(mappedBy = "artists")
     private Set<Band> bands = new HashSet<>();
 
     @ManyToMany(mappedBy = "artists")
@@ -51,18 +45,8 @@ public class Artist{
     }
 
 
-    public void addBand(Band band) {
-        bands.add(band);
-        band.getArtists().add(this);
-    }
 
-    public void removeBand(Band band) {
-        bands.remove(band);
-        band.getArtists().remove(this);
-    }
-
-
-    public Artist(Long id, String firstName, String lastName, String stageName, Date birthday, Date startDateActivePeriod, Date endDateActivePeriod) {
+    public Artist(Long id, String firstName, String lastName, String stageName, Date birthday, String startDateActivePeriod, String endDateActivePeriod) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -78,6 +62,10 @@ public class Artist{
 
     public Set<Album> getAlbums() {
         return albums;
+    }
+
+    public Set<Band> getBands() {
+        return bands;
     }
 
     public Long getId() {
@@ -120,19 +108,19 @@ public class Artist{
         this.birthday = birthday;
     }
 
-    public java.sql.Date getStartDateActivePeriod() {
+    public String getStartDateActivePeriod() {
         return startDateActivePeriod;
     }
 
-    public void setStartDateActivePeriod(java.sql.Date startDateActivePeriod) {
+    public void setStartDateActivePeriod(String startDateActivePeriod) {
         this.startDateActivePeriod = startDateActivePeriod;
     }
 
-    public java.sql.Date getEndDateActivePeriod() {
+    public String getEndDateActivePeriod() {
         return endDateActivePeriod;
     }
 
-    public void setEndDateActivePeriod(java.sql.Date endDateActivePeriod) {
+    public void setEndDateActivePeriod(String endDateActivePeriod) {
         this.endDateActivePeriod = endDateActivePeriod;
     }
 

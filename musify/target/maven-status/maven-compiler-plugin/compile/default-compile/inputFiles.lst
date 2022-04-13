@@ -1,6 +1,7 @@
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\controllers\UsersController.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\repo\ArtistRepo.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\ApiError.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\BandNewDTO.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\storage\storage\controllers\UserControllerTest.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\storage\storage\controllers\HelloController.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\security\JWTUtils.java
@@ -12,12 +13,14 @@ C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musif
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\storage\storage\repository\TestRepo.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\UnauthorizedException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\ArtistDTO.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\repo\BandRepo.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\Album.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\security\JWTAuthorizationFilter.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\Token.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\User.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\UserMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\InvalidArtistException.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\service\BandService.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\UserDTO.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\storage\storage\hibernate\HibernateUtil.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\ArtistMapper.java
@@ -27,11 +30,14 @@ C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musif
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\InvalidTokenException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\service\UserService.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\storage\storage\repository\ArtistRepo.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\BandDTO.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\UserRowMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\RestExceptionHandler.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\service\ArtistService.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\Band.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\repo\UserRepo.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\storage\storage\hibernate\TestHibernate.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\BandMapper.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\controllers\BandController.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\security\WebSecurity.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\AlternativeTitle.java

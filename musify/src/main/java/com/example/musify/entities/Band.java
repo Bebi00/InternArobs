@@ -1,7 +1,6 @@
 package com.example.musify.entities;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,15 +9,19 @@ import java.util.Set;
 public class Band {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private long bandId;
     private String bandName;
     private String location;
-    private java.sql.Date startDateActivePeriod;
-    private java.sql.Date endDateActivePeriod;
+    private String startDateActivePeriod;
+    private String endDateActivePeriod;
 
-    @ManyToMany(mappedBy = "bands")
+    @ManyToMany(cascade = {
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "band_artists",
+            joinColumns = @JoinColumn(name = "band_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id"))
     private Set<Artist> artists = new HashSet<>();
 
     @ManyToMany(mappedBy = "bands")
@@ -27,13 +30,26 @@ public class Band {
     @ManyToMany(mappedBy = "bands")
     private Set<Song> songs = new HashSet<>();
 
-    public Band(long id, long bandId, String bandName, String location, Date startDateActivePeriod, Date endDateActivePeriod) {
+    public Band(long id, String bandName, String location, String startDateActivePeriod, String endDateActivePeriod) {
         this.id = id;
-        this.bandId = bandId;
         this.bandName = bandName;
         this.location = location;
         this.startDateActivePeriod = startDateActivePeriod;
         this.endDateActivePeriod = endDateActivePeriod;
+    }
+
+    public Band() {
+
+    }
+
+    public void addArtist(Artist artist) {
+        artists.add(artist);
+        artist.getBands().add(this);
+    }
+
+    public void removeArtist(Artist artist) {
+        artists.remove(artist);
+        artist.getBands().remove(this);
     }
 
     public Set<Artist> getArtists() {
@@ -56,16 +72,6 @@ public class Band {
         this.id = id;
     }
 
-
-    public long getBandId() {
-        return bandId;
-    }
-
-    public void setBandId(long bandId) {
-        this.bandId = bandId;
-    }
-
-
     public String getBandName() {
         return bandName;
     }
@@ -83,4 +89,20 @@ public class Band {
         this.location = location;
     }
 
+
+    public String getStartDateActivePeriod() {
+        return startDateActivePeriod;
+    }
+
+    public void setStartDateActivePeriod(String startDateActivePeriod) {
+        this.startDateActivePeriod = startDateActivePeriod;
+    }
+
+    public String getEndDateActivePeriod() {
+        return endDateActivePeriod;
+    }
+
+    public void setEndDateActivePeriod(String endDateActivePeriod) {
+        this.endDateActivePeriod = endDateActivePeriod;
+    }
 }

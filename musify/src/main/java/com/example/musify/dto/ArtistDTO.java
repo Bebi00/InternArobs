@@ -7,15 +7,15 @@ import java.sql.Date;
 @Component
 public class ArtistDTO {
 
-  private long id;
+  private Long id;
   private String firstName;
   private String lastName;
   private String stageName;
   private java.sql.Date birthday;
-  private java.sql.Date startDateActivePeriod;
-  private java.sql.Date endDateActivePeriod;
+  private String startDateActivePeriod;
+  private String endDateActivePeriod;
 
-  public ArtistDTO(long id, String firstName, String lastName, String stageName, Date birthday, Date startDateActivePeriod, Date endDateActivePeriod) {
+  public ArtistDTO(Long id, String firstName, String lastName, String stageName, Date birthday, String  startDateActivePeriod, String endDateActivePeriod) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -73,20 +73,20 @@ public class ArtistDTO {
   }
 
 
-  public java.sql.Date getStartDateActivePeriod() {
+  public String getStartDateActivePeriod() {
     return startDateActivePeriod;
   }
 
-  public void setStartDateActivePeriod(java.sql.Date startDateActivePeriod) {
+  public void setStartDateActivePeriod(String startDateActivePeriod) {
     this.startDateActivePeriod = startDateActivePeriod;
   }
 
 
-  public java.sql.Date getEndDateActivePeriod() {
+  public String getEndDateActivePeriod() {
     return endDateActivePeriod;
   }
 
-  public void setEndDateActivePeriod(java.sql.Date endDateActivePeriod) {
+  public void setEndDateActivePeriod(String endDateActivePeriod) {
     this.endDateActivePeriod = endDateActivePeriod;
   }
 

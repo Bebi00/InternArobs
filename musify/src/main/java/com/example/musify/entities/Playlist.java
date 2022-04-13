@@ -12,10 +12,10 @@ public class Playlist {
 
   @Id
   @GeneratedValue
-  private long id;
+  private Long id;
   private String name;
-  private long ownerUser;
-  private long type;
+  private Long ownerUser;
+  private Boolean type;
   private java.sql.Date createdDate;
   private java.sql.Timestamp lastUpdatedDate;
 
@@ -25,13 +25,17 @@ public class Playlist {
   @ManyToMany(mappedBy = "playlists")
   private Set<User> users = new HashSet<>();
 
-  public Playlist(long id, String name, long ownerUser, long type, Date createdDate, Timestamp lastUpdatedDate) {
+  public Playlist(Long id, String name, Long ownerUser, Boolean type, Date createdDate, Timestamp lastUpdatedDate) {
     this.id = id;
     this.name = name;
     this.ownerUser = ownerUser;
     this.type = type;
     this.createdDate = createdDate;
     this.lastUpdatedDate = lastUpdatedDate;
+  }
+
+  public Playlist() {
+
   }
 
   public Set<Song> getSongs() {
@@ -50,11 +54,11 @@ public class Playlist {
     this.users = users;
   }
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -68,20 +72,20 @@ public class Playlist {
   }
 
 
-  public long getOwnerUser() {
+  public Long getOwnerUser() {
     return ownerUser;
   }
 
-  public void setOwnerUser(long ownerUser) {
+  public void setOwnerUser(Long ownerUser) {
     this.ownerUser = ownerUser;
   }
 
 
-  public long getType() {
+  public Boolean getType() {
     return type;
   }
 
-  public void setType(long type) {
+  public void setType(Boolean type) {
     this.type = type;
   }
 

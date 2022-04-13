@@ -13,8 +13,8 @@ public class TestRepo {
         Date end = new SimpleDateFormat("yyyy-MM-dd").parse("1988-00-00");
 
         java.sql.Date birth = new java.sql.Date(birthday.getTime());
-        java.sql.Date startDate = new java.sql.Date(start.getTime());
-        java.sql.Date endDate = new java.sql.Date(end.getTime());
+        String startDate = new java.sql.Date(start.getTime()).toString();
+        String endDate = new java.sql.Date(end.getTime()).toString();
 
 
         Artist artist= new Artist(0L,"Marshall","Mathers","Eminem",  birth,startDate,endDate);

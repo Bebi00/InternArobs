@@ -7,12 +7,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ArtistRepo extends JpaRepository<Artist,Long> {
+public interface ArtistRepo extends JpaRepository<Artist, Long> {
 
     @Override
     List<Artist> findAll();
 
+    Artist findArtistById(Long id);
+
     Artist findByStageName(String stageName);
 
-    Artist save(Artist artist);
+    <Saved extends Artist> Saved save(Saved artist);
+
+    void removeArtistById(Long id);
 }
