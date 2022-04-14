@@ -15,8 +15,9 @@ public class UserDTO {
     private String password;
     private String countryOfOrigin;
     private int role;
+    private int active;
 
-    public UserDTO(Integer id,String firstName, String lastName, String email, String password, String countryOfOrigin,int role) {
+    public UserDTO(Integer id, String firstName, String lastName, String email, String password, String countryOfOrigin, int role, int active) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -24,6 +25,7 @@ public class UserDTO {
         this.password = password;
         this.countryOfOrigin = countryOfOrigin;
         this.role=role;
+        this.active = active;
     }
 
     public UserDTO() {
@@ -84,5 +86,13 @@ public class UserDTO {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 }

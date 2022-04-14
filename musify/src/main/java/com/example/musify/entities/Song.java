@@ -11,25 +11,20 @@ import java.util.Set;
 @Table(name = "songs")
 public class Song {
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String title;
     private long contributorArtists;
-    private long album;
+
+    @Column(name = "album_id")
+    private long albumId;
     private long duration;
     private java.sql.Date creationDate;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(name = "songs_albums",
-            joinColumns = @JoinColumn(name = "song_id"),
-            inverseJoinColumns = @JoinColumn(name = "album_id"))
-    private Set<Album> albums = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Album album;
 
     @ManyToMany(cascade = {
-            CascadeType.PERSIST,
             CascadeType.MERGE
     })
     @JoinTable(name = "songs_playlists",
@@ -45,7 +40,6 @@ public class Song {
     private List<AlternativeTitle> alternativeTitles = new ArrayList<>();
 
     @ManyToMany(cascade = {
-            CascadeType.PERSIST,
             CascadeType.MERGE
     })
     @JoinTable(name = "artists_songs",
@@ -53,14 +47,9 @@ public class Song {
             inverseJoinColumns = @JoinColumn(name = "artist_id"))
     private Set<Artist> artists = new HashSet<>();
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(name = "artists_songs",
-            joinColumns = @JoinColumn(name = "song_id"),
-            inverseJoinColumns = @JoinColumn(name = "band_id"))
-    private Set<Band> bands = new HashSet<>();
+    public Song() {
+
+    }
 
 
     public void addArtist(Artist artist) {
@@ -73,16 +62,6 @@ public class Song {
         artist.getSongs().remove(this);
     }
 
-    public void addBand(Band band) {
-        bands.add(band);
-        band.getSongs().add(this);
-    }
-
-    public void removeBand(Band band) {
-        bands.remove(band);
-        band.getSongs().remove(this);
-    }
-
     public void addPlaylist(Playlist playlist) {
         playlists.add(playlist);
         playlist.getSongs().add(this);
@@ -93,22 +72,12 @@ public class Song {
         playlist.getSongs().remove(this);
     }
 
-    public void addAlbum(Album album) {
-        albums.add(album);
-        album.getSongs().add(this);
-    }
-
-    public void removeAlbum(Album album) {
-        albums.remove(album);
-        album.getSongs().remove(this);
-    }
-
 
     public Song(long id, String title, long contributorArtists, long album, long duration, Date creationDate) {
         this.id = id;
         this.title = title;
         this.contributorArtists = contributorArtists;
-        this.album = album;
+        this.albumId = album;
         this.duration = duration;
         this.creationDate = creationDate;
     }
@@ -141,11 +110,11 @@ public class Song {
 
 
     public long getAlbum() {
-        return album;
+        return albumId;
     }
 
     public void setAlbum(long album) {
-        this.album = album;
+        this.albumId = album;
     }
 
 

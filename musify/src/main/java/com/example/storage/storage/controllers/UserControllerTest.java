@@ -1,14 +1,13 @@
 package com.example.storage.storage.controllers;
 
 import com.example.musify.dto.UserDTO;
+import com.example.musify.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.musify.service.UserService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -21,7 +20,7 @@ public class UserControllerTest {
 
     @GetMapping("/user")
     public void addUser(@RequestParam String firstName, String lastName){
-        userService.addUser(firstName,lastName);
+//        userService.addUser(firstName,lastName);
     }
 
     @GetMapping("/allUsers")

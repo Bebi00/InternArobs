@@ -2,7 +2,9 @@ package com.example.musify.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,20 +33,19 @@ public class Artist{
     @Column(name = "end_date_active_period")
     private String endDateActivePeriod;
 
-   @ManyToMany(mappedBy = "artists")
-    private Set<Band> bands = new HashSet<>();
-
-    @ManyToMany(mappedBy = "artists")
-    private Set<Album> albums = new HashSet<>();
-
 
     @ManyToMany(mappedBy = "artists")
     private Set<Song> songs = new HashSet<>();
 
+    @OneToMany(
+            mappedBy = "artist",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Album> albums = new ArrayList<>();
+
     public Artist() {
     }
-
-
 
     public Artist(Long id, String firstName, String lastName, String stageName, Date birthday, String startDateActivePeriod, String endDateActivePeriod) {
         this.id = id;
@@ -60,12 +61,8 @@ public class Artist{
         return songs;
     }
 
-    public Set<Album> getAlbums() {
+    public List<Album> getAlbums() {
         return albums;
-    }
-
-    public Set<Band> getBands() {
-        return bands;
     }
 
     public Long getId() {

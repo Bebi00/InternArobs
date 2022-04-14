@@ -2,20 +2,17 @@ package com.example.musify.service;
 
 import com.example.musify.dto.UserDTO;
 import com.example.musify.entities.User;
-
-
 import com.example.musify.exceptions.InvalidUserException;
 import com.example.musify.exceptions.UnauthorizedException;
-import com.example.musify.security.JWTUtils;
-
 import com.example.musify.mapper.UserMapper;
+import com.example.musify.repo.UserRepo;
+import com.example.musify.security.JWTUtils;
+import com.example.musify.security.PasswordEncryption;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import com.example.musify.repo.UserRepo;
 
-
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,20 +32,20 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public void addUser(String firstName, String lastName) {
-        //UserDTO user=new UserDTO(firstName,lastName);
-        // userRepo.save(user);
-    }
-
     public UserDTO registerUser(UserDTO userDTO) {
         User user = userMapper.toNewEntity(userDTO);
-        UserDTO newUserDTO = userMapper.toDTO(userRepo.save(user));
-        return newUserDTO;
+        String encryptedPass = null;
+        try {
+            encryptedPass = PasswordEncryption.toHexString(PasswordEncryption.getSHA(user.getPassword()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        user.setPassword(encryptedPass);
+        return userMapper.toDTO(userRepo.save(user));
     }
 
-    public String loginUser(UserDTO userDTO) {
-        User user1 = userMapper.toEntity(userDTO);
-        Optional<User> dbUser = userRepo.getByEmail(user1.getEmail());
+    public String loginUser(String email,String password) {
+        Optional<User> dbUser = userRepo.getByEmail(email);
         User user2 = null;
         if (dbUser.isPresent()) {
             user2 = dbUser.get();
@@ -60,14 +57,27 @@ public class UserService {
             }
         }
 
-
         assert user2 != null;
-        if (user1.getEmail().equals(user2.getEmail()) && user1.getPassword().equals(user2.getPassword())) {
+        String encryptedPass = null;
+        try {
+            encryptedPass = PasswordEncryption.toHexString(PasswordEncryption.getSHA(password));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        assert encryptedPass != null;
+        if ( encryptedPass.equals(user2.getPassword()) && user2.getActive() == 1) {
             Object[] jwtInfo = jwtUtils.generateToken(user2.getId(), user2.getRole(), user2.getEmail());
             String token = jwtInfo[0].toString();
             Date expiryDate = (Date) jwtInfo[1];
             userRepo.addToken(token, user2.getId(), expiryDate);
             return token;
+        }else {
+            try {
+                throw new InvalidUserException("User not found");
+            } catch (InvalidUserException e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
@@ -127,6 +137,17 @@ public class UserService {
             }
         }
         return null;
+    }
+
+    public Optional<UserDTO> deleteUser(String header){
+        List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer id = (Integer) userInfo.get(0);
+        return Optional.of(userMapper.toDTO(userRepo.inactivateUser(id)));
+    }
+
+    public Optional<UserDTO> updateUser(UserDTO userDTO){
+        userRepo.update(userMapper.toEntity(userDTO));
+        return Optional.of(userMapper.toDTO(userRepo.getById(userDTO.getId()).get()));
     }
 
 

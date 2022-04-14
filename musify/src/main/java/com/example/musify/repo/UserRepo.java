@@ -60,8 +60,9 @@ public class UserRepo implements DAO<User> {
         return user;
     }
 
-    @Override
     public void update(User user) {
+        String sql = String.format("UPDATE musify.users SET first_name='%s',last_name='%s',email='%s',password='%s',country_of_origin ='%s' WHERE id='%d'",user.getFirstName(),user.getLastName(),user.getEmail(),user.getPassword(),user.getCountryOfOrigin(),user.getId());
+        jdbcTemplate.update(sql);
     }
 
     public User setRole(UserDTO userDTO,int role){
@@ -110,5 +111,12 @@ public class UserRepo implements DAO<User> {
         }
         return token.equals(dbToken);
 
+    }
+
+    public User inactivateUser(int id){
+        String sql = String.format("UPDATE musify.users SET active = '%d' WHERE id='%d'",0,id);
+        jdbcTemplate.update(sql);
+        sql = String.format("SELECT * from musify.users WHERE id='%d'",id);
+        return jdbcTemplate.query(sql,new UserRowMapper()).get(0);
     }
 }

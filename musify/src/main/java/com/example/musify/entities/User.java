@@ -11,7 +11,7 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String firstName;
     private String lastName;
@@ -19,6 +19,7 @@ public class User {
     private String password;
     private String countryOfOrigin;
     private int role;
+    private int active;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -47,7 +48,7 @@ public class User {
     }
 
 
-    public User(Integer id,String firstName, String lastName, String email, String password, String countryOfOrigin,int role) {
+    public User(Integer id, String firstName, String lastName, String email, String password, String countryOfOrigin, int role, int active) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -55,6 +56,7 @@ public class User {
         this.password = password;
         this.countryOfOrigin = countryOfOrigin;
         this.role = role;
+        this.active = active;
     }
 
     public User() {
@@ -115,6 +117,14 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 }
 
