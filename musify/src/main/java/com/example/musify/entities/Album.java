@@ -15,11 +15,6 @@ public class Album {
     private String title;
     private String description;
 
-    @Column(name = "artist_id")
-    private long artistId;
-
-    @Column(name = "band_id")
-    private long bandId;
     private String genre;
     private java.sql.Date releaseDate;
     private String label;
@@ -43,8 +38,6 @@ public class Album {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.artistId = artist;
-        this.bandId = bandId;
         this.genre = genre;
         this.releaseDate = releaseDate;
         this.label = label;
@@ -81,15 +74,6 @@ public class Album {
     }
 
 
-    public long getArtist() {
-        return artistId;
-    }
-
-    public void setArtist(long artist) {
-        this.artistId = artist;
-    }
-
-
     public String getGenre() {
         return genre;
     }
@@ -116,11 +100,4 @@ public class Album {
         this.label = label;
     }
 
-    public long getBandId() {
-        return bandId;
-    }
-
-    public void setBandId(long bandId) {
-        this.bandId = bandId;
-    }
 }

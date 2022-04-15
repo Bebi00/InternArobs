@@ -27,7 +27,7 @@ public class UserService {
     JWTUtils jwtUtils;
 
     @Autowired
-    public UserService(UserRepo userRepo,UserMapper userMapper) {
+    public UserService(UserRepo userRepo, UserMapper userMapper) {
         this.userRepo = userRepo;
         this.userMapper = userMapper;
     }
@@ -44,12 +44,12 @@ public class UserService {
         return userMapper.toDTO(userRepo.save(user));
     }
 
-    public String loginUser(String email,String password) {
+    public String loginUser(String email, String password) {
         Optional<User> dbUser = userRepo.getByEmail(email);
         User user2 = null;
         if (dbUser.isPresent()) {
             user2 = dbUser.get();
-        }else {
+        } else {
             try {
                 throw new InvalidUserException("User was not found");
             } catch (InvalidUserException e) {
@@ -66,21 +66,15 @@ public class UserService {
         }
 
         assert encryptedPass != null;
-        if ( encryptedPass.equals(user2.getPassword()) && user2.getActive() == 1) {
+        if (encryptedPass.equals(user2.getPassword()) && user2.getActive() == 1) {
             Object[] jwtInfo = jwtUtils.generateToken(user2.getId(), user2.getRole(), user2.getEmail());
             String token = jwtInfo[0].toString();
             Date expiryDate = (Date) jwtInfo[1];
             userRepo.addToken(token, user2.getId(), expiryDate);
             return token;
-        }else {
-            try {
-                throw new InvalidUserException("User not found");
-            } catch (InvalidUserException e) {
-                e.printStackTrace();
-            }
+        } else {
+            throw new InvalidUserException("User not found");
         }
-
-        return null;
     }
 
     public Boolean logoutUser(String header) {
@@ -93,8 +87,8 @@ public class UserService {
         List<Object> userInfo = (List<Object>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User newUser = null;
         if ((Integer) userInfo.get(1) == 1) {
-           newUser = userRepo.setRole(userDTO,1);
-        }else{
+            newUser = userRepo.setRole(userDTO, 1);
+        } else {
             try {
                 throw new UnauthorizedException("User does not have permission.");
             } catch (UnauthorizedException e) {
@@ -139,13 +133,13 @@ public class UserService {
         return null;
     }
 
-    public Optional<UserDTO> deleteUser(String header){
+    public Optional<UserDTO> deleteUser(String header) {
         List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer id = (Integer) userInfo.get(0);
         return Optional.of(userMapper.toDTO(userRepo.inactivateUser(id)));
     }
 
-    public Optional<UserDTO> updateUser(UserDTO userDTO){
+    public Optional<UserDTO> updateUser(UserDTO userDTO) {
         userRepo.update(userMapper.toEntity(userDTO));
         return Optional.of(userMapper.toDTO(userRepo.getById(userDTO.getId()).get()));
     }

@@ -34,10 +34,10 @@ public class SongService {
     }
 
     @Transactional
-    public Optional<SongDTO> saveBand(SongNewDTO songNewDTO) {
+    public SongDTO saveSong(SongNewDTO songNewDTO) {
         Song newSong = songMapper.toEntityNew(songNewDTO);
         Song song = songRepo.save(newSong);
-        return Optional.of(songMapper.toDTO(song));
+        return songMapper.toDTO(song);
     }
 
     @Transactional
@@ -48,7 +48,7 @@ public class SongService {
     }
 
     @Transactional
-    public Optional<SongDTO> updateById(SongNewDTO songNewDTO){
-       return saveBand(songNewDTO);
+    public SongDTO updateById(SongNewDTO songNewDTO){
+       return saveSong(songNewDTO);
     }
 }

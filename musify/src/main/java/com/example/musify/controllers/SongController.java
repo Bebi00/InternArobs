@@ -32,8 +32,8 @@ public class SongController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Optional<SongDTO>> saveSong(@RequestBody SongNewDTO songNewDTO){
-        return new ResponseEntity<>(songService.saveBand(songNewDTO),HttpStatus.OK);
+    public ResponseEntity<SongDTO> saveSong(@RequestBody SongNewDTO songNewDTO){
+        return new ResponseEntity<>(songService.saveSong(songNewDTO),HttpStatus.OK);
     }
 
     @PostMapping("/remove/{id}")
@@ -42,7 +42,7 @@ public class SongController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<Optional<SongDTO>> updateSong(@RequestBody SongNewDTO songNewDTO){
+    public ResponseEntity<SongDTO> updateSong(@RequestBody SongNewDTO songNewDTO){
         return new ResponseEntity<>(songService.updateById(songNewDTO),HttpStatus.OK);
     }
 }

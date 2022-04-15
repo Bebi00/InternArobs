@@ -2,15 +2,18 @@ package com.example.musify.dto;
 
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Column;
+
 @Component
 public class SongDTO {
   private Long id;
   private String title;
-  private long contributorArtists;
-  private long albumId;
   private long duration;
+  @Column(name = "creation_date")
   private java.sql.Date creationDate;
-  private long order_In_Album;
+
+  @Column(name = "order_in_album")
+  private long orderInAlbum;
 
 
   public long getId() {
@@ -28,24 +31,6 @@ public class SongDTO {
 
   public void setTitle(String title) {
     this.title = title;
-  }
-
-
-  public long getContributorArtists() {
-    return contributorArtists;
-  }
-
-  public void setContributorArtists(long contributorArtists) {
-    this.contributorArtists = contributorArtists;
-  }
-
-
-  public long getAlbumId() {
-    return albumId;
-  }
-
-  public void setAlbumId(long albumId) {
-    this.albumId = albumId;
   }
 
 
@@ -67,12 +52,12 @@ public class SongDTO {
   }
 
 
-  public long getOrder_In_Album() {
-    return order_In_Album;
+  public long getOrderInAlbum() {
+    return orderInAlbum;
   }
 
-  public void setOrder_In_Album(long order_In_Album) {
-    this.order_In_Album = order_In_Album;
+  public void setOrderInAlbum(long orderInAlbum) {
+    this.orderInAlbum = orderInAlbum;
   }
 
 }

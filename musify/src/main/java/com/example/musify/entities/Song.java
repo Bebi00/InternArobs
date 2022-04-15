@@ -13,13 +13,18 @@ public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private long contributorArtists;
 
-    @Column(name = "album_id")
-    private long albumId;
-    private long duration;
+    @Column(name = "title")
+    private String title;
+
+    @Column(name ="duration")
+    private Long duration;
+
+    @Column(name = "creationDate")
     private java.sql.Date creationDate;
+
+    @Column(name = "order_in_album")
+    private long orderInAlbum;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Album album;
@@ -40,7 +45,7 @@ public class Song {
     private List<AlternativeTitle> alternativeTitles = new ArrayList<>();
 
     @ManyToMany(cascade = {
-            CascadeType.MERGE
+//            CascadeType.MERGE
     })
     @JoinTable(name = "artists_songs",
             joinColumns = @JoinColumn(name = "song_id"),
@@ -73,11 +78,9 @@ public class Song {
     }
 
 
-    public Song(long id, String title, long contributorArtists, long album, long duration, Date creationDate) {
+    public Song(long id, String title, long duration, Date creationDate) {
         this.id = id;
         this.title = title;
-        this.contributorArtists = contributorArtists;
-        this.albumId = album;
         this.duration = duration;
         this.creationDate = creationDate;
     }
@@ -100,24 +103,6 @@ public class Song {
     }
 
 
-    public long getContributorArtists() {
-        return contributorArtists;
-    }
-
-    public void setContributorArtists(long contributorArtists) {
-        this.contributorArtists = contributorArtists;
-    }
-
-
-    public long getAlbum() {
-        return albumId;
-    }
-
-    public void setAlbum(long album) {
-        this.albumId = album;
-    }
-
-
     public long getDuration() {
         return duration;
     }
@@ -135,4 +120,51 @@ public class Song {
         this.creationDate = creationDate;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setDuration(Long duration) {
+        this.duration = duration;
+    }
+
+    public long getOrderInAlbum() {
+        return orderInAlbum;
+    }
+
+    public void setOrderInAlbum(long orderInAlbum) {
+        this.orderInAlbum = orderInAlbum;
+    }
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
+    public Set<Playlist> getPlaylists() {
+        return playlists;
+    }
+
+    public void setPlaylists(Set<Playlist> playlists) {
+        this.playlists = playlists;
+    }
+
+    public List<AlternativeTitle> getAlternativeTitles() {
+        return alternativeTitles;
+    }
+
+    public void setAlternativeTitles(List<AlternativeTitle> alternativeTitles) {
+        this.alternativeTitles = alternativeTitles;
+    }
+
+    public Set<Artist> getArtists() {
+        return artists;
+    }
+
+    public void setArtists(Set<Artist> artists) {
+        this.artists = artists;
+    }
 }
