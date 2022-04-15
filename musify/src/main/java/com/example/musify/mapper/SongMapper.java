@@ -9,7 +9,6 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface SongMapper {
     SongDTO toDTO(Song song);

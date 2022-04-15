@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SongRepo extends JpaRepository<Song, Long> {
     Song findByTitle(String title);
-
     void removeSongById(Long id);
 
 }

@@ -1,7 +1,6 @@
 package com.example.musify.entities;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +19,7 @@ public class Song {
     @Column(name ="duration")
     private Long duration;
 
-    @Column(name = "creationDate")
+    @Column(name = "creation_date")
     private java.sql.Date creationDate;
 
     @Column(name = "order_in_album")
@@ -45,7 +44,7 @@ public class Song {
     private List<AlternativeTitle> alternativeTitles = new ArrayList<>();
 
     @ManyToMany(cascade = {
-//            CascadeType.MERGE
+            CascadeType.MERGE
     })
     @JoinTable(name = "artists_songs",
             joinColumns = @JoinColumn(name = "song_id"),
@@ -54,17 +53,6 @@ public class Song {
 
     public Song() {
 
-    }
-
-
-    public void addArtist(Artist artist) {
-        artists.add(artist);
-        artist.getSongs().add(this);
-    }
-
-    public void removeArtist(Artist artist) {
-        artists.remove(artist);
-        artist.getSongs().remove(this);
     }
 
     public void addPlaylist(Playlist playlist) {
@@ -77,13 +65,6 @@ public class Song {
         playlist.getSongs().remove(this);
     }
 
-
-    public Song(long id, String title, long duration, Date creationDate) {
-        this.id = id;
-        this.title = title;
-        this.duration = duration;
-        this.creationDate = creationDate;
-    }
 
     public long getId() {
         return id;

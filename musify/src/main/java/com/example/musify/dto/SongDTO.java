@@ -2,17 +2,12 @@ package com.example.musify.dto;
 
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
-
 @Component
 public class SongDTO {
   private Long id;
   private String title;
   private long duration;
-  @Column(name = "creation_date")
   private java.sql.Date creationDate;
-
-  @Column(name = "order_in_album")
   private long orderInAlbum;
 
 

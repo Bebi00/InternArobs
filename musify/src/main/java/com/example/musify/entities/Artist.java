@@ -37,6 +37,9 @@ public class Artist{
     @ManyToMany(mappedBy = "artists")
     private Set<Song> songs = new HashSet<>();
 
+    @ManyToMany(mappedBy = "artists")
+    private Set<Band> bands = new HashSet<>();
+
     @OneToMany(
             mappedBy = "artist",
             cascade = CascadeType.ALL,
@@ -59,6 +62,10 @@ public class Artist{
 
     public Set<Song> getSongs() {
         return songs;
+    }
+
+    public Set<Band> getBands() {
+        return bands;
     }
 
     public List<Album> getAlbums() {

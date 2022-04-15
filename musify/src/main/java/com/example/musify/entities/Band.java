@@ -33,16 +33,7 @@ public class Band {
     )
     private List<Album> albums = new ArrayList<>();
 
-    public Band(long id, String bandName, String location, String startDateActivePeriod, String endDateActivePeriod) {
-        this.id = id;
-        this.bandName = bandName;
-        this.location = location;
-        this.startDateActivePeriod = startDateActivePeriod;
-        this.endDateActivePeriod = endDateActivePeriod;
-    }
-
     public Band() {
-
     }
 
     public Set<Artist> getArtists() {
