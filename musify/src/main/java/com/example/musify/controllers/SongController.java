@@ -1,5 +1,7 @@
 package com.example.musify.controllers;
 
+import com.example.musify.dto.AlternativeTitleDTO;
+import com.example.musify.dto.AlternativeTitleNewDTO;
 import com.example.musify.dto.SongDTO;
 import com.example.musify.dto.SongNewDTO;
 import com.example.musify.service.SongService;
@@ -28,7 +30,7 @@ public class SongController {
 
     @GetMapping("/{title}")
     public ResponseEntity<Optional<SongDTO>> getSongByTitle( @PathVariable String title){
-        return new ResponseEntity<>(songService.getSongByTitle(title),HttpStatus.OK);
+        return new ResponseEntity<>(Optional.of(songService.getSongByTitle(title)),HttpStatus.OK);
     }
 
     @PostMapping("/add")
@@ -37,12 +39,32 @@ public class SongController {
     }
 
     @PostMapping("/remove/{id}")
-    public ResponseEntity<Optional<SongDTO>> removeSong(@PathVariable Long id){
+    public ResponseEntity<SongDTO> removeSong(@PathVariable Long id){
         return new ResponseEntity<>(songService.removeById(id),HttpStatus.OK);
     }
 
     @PostMapping("/update")
     public ResponseEntity<SongDTO> updateSong(@RequestBody SongNewDTO songNewDTO){
         return new ResponseEntity<>(songService.updateById(songNewDTO),HttpStatus.OK);
+    }
+
+    @PostMapping("/addAlternativeTitle")
+    public ResponseEntity<AlternativeTitleDTO> addAlternativeTitle(@RequestBody AlternativeTitleNewDTO alternativeTitleNewDTO){
+        return new ResponseEntity<>(songService.saveAlternativeTitle(alternativeTitleNewDTO),HttpStatus.OK);
+    }
+
+    @PostMapping("/removeAlternativeTitle/{id}")
+    public ResponseEntity<AlternativeTitleDTO> removeAlternativeTitle(@PathVariable Long id){
+        return new ResponseEntity<>(songService.removeAlternativeTitleById(id),HttpStatus.OK);
+    }
+
+    @PostMapping("/updateAlternativeTitle")
+    public ResponseEntity<AlternativeTitleDTO> updateAlternativeTitle(@RequestBody AlternativeTitleNewDTO alternativeTitleNewDTO){
+        return new ResponseEntity<>(songService.updateAlternativeTitle(alternativeTitleNewDTO),HttpStatus.OK);
+    }
+
+    @GetMapping("/allAlternativeTitles/{songId}")
+    public ResponseEntity<List<AlternativeTitleDTO>> getAllAlternativeTitles(@PathVariable Long songId){
+        return new ResponseEntity<>(songService.getAllAlternativeTitles(songId),HttpStatus.OK);
     }
 }

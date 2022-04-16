@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class AlternativeTitle {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
   private String alternativeTitle;
@@ -35,8 +35,6 @@ public class AlternativeTitle {
   }
 
 
-
-
   public String getAlternativeTitle() {
     return alternativeTitle;
   }
@@ -54,4 +52,11 @@ public class AlternativeTitle {
     this.language = language;
   }
 
+  public Song getSong() {
+    return song;
+  }
+
+  public void setSong(Song song) {
+    this.song = song;
+  }
 }

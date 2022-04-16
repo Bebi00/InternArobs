@@ -1,20 +1,16 @@
 package com.example.musify.mapper;
 
-import com.example.musify.dto.ArtistDTO;
 import com.example.musify.dto.SongDTO;
 import com.example.musify.dto.SongNewDTO;
-import com.example.musify.entities.Artist;
 import com.example.musify.entities.Song;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-04-15T12:10:37+0300",
+    date = "2022-04-16T11:12:22+0300",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -67,7 +63,6 @@ public class SongMapperImpl implements SongMapper {
         song.setDuration( songNewDTO.getDuration() );
         song.setCreationDate( songNewDTO.getCreationDate() );
         song.setOrderInAlbum( songNewDTO.getOrderInAlbum() );
-        song.setArtists( artistDTOSetToArtistSet( songNewDTO.getArtists() ) );
 
         return song;
     }
@@ -84,36 +79,5 @@ public class SongMapperImpl implements SongMapper {
         }
 
         return list;
-    }
-
-    protected Artist artistDTOToArtist(ArtistDTO artistDTO) {
-        if ( artistDTO == null ) {
-            return null;
-        }
-
-        Artist artist = new Artist();
-
-        artist.setId( artistDTO.getId() );
-        artist.setFirstName( artistDTO.getFirstName() );
-        artist.setLastName( artistDTO.getLastName() );
-        artist.setStageName( artistDTO.getStageName() );
-        artist.setBirthday( artistDTO.getBirthday() );
-        artist.setStartDateActivePeriod( artistDTO.getStartDateActivePeriod() );
-        artist.setEndDateActivePeriod( artistDTO.getEndDateActivePeriod() );
-
-        return artist;
-    }
-
-    protected Set<Artist> artistDTOSetToArtistSet(Set<ArtistDTO> set) {
-        if ( set == null ) {
-            return null;
-        }
-
-        Set<Artist> set1 = new HashSet<Artist>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
-        for ( ArtistDTO artistDTO : set ) {
-            set1.add( artistDTOToArtist( artistDTO ) );
-        }
-
-        return set1;
     }
 }

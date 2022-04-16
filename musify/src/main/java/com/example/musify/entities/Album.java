@@ -1,7 +1,7 @@
 package com.example.musify.entities;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class Album {
     private String description;
 
     private String genre;
-    private java.sql.Date releaseDate;
+    private LocalDate releaseDate;
     private String label;
 
     @OneToMany(
@@ -34,7 +34,7 @@ public class Album {
 
     public Album() {}
 
-    public Album(long id, String title, String description, long artist, long bandId, String genre, Date releaseDate, String label) {
+    public Album(long id, String title, String description, long artist, long bandId, String genre, LocalDate releaseDate, String label) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -83,11 +83,11 @@ public class Album {
     }
 
 
-    public java.sql.Date getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(java.sql.Date releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 

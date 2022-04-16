@@ -65,6 +65,26 @@ public class Song {
         playlist.getSongs().remove(this);
     }
 
+    public void addArtist(Artist artist) {
+        artists.add(artist);
+        artist.getSongs().add(this);
+    }
+
+    public void removeArtist(Artist artist) {
+        artists.remove(artist);
+        artist.getSongs().remove(this);
+    }
+
+    public void addAlternativeTitle(AlternativeTitle alternativeTitle) {
+        alternativeTitles.add(alternativeTitle);
+        alternativeTitle.setSong(this);
+    }
+
+    public void removeAlternativeTitle(AlternativeTitle alternativeTitle) {
+        alternativeTitles.remove(alternativeTitle);
+        alternativeTitle.setSong(null);
+    }
+
 
     public long getId() {
         return id;

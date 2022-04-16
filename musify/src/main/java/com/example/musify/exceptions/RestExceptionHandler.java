@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
@@ -45,9 +44,22 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidArtistException.class)
-    protected ResponseEntity<Object> handleInvalidArtistException(InvalidUserException e){
+    protected ResponseEntity<Object> handleInvalidArtistException(InvalidArtistException e){
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
         log.error("Artist with the given id was not found.");
+        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidSongException.class)
+    protected ResponseEntity<Object> handleInvalidSongException(InvalidSongException e){
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
+        log.error("Song with the given id was not found.");
+        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(InvalidAlternativeTitleException.class)
+    protected ResponseEntity<Object> handleInvalidSongException(InvalidAlternativeTitleException e){
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
+        log.error("The Alternative Title with the given id was not found.");
         return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
     }
 }

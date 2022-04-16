@@ -12,7 +12,7 @@ public class SongNewDTO {
   private long duration;
   private java.sql.Date creationDate;
   private long orderInAlbum;
-  private Set<ArtistDTO> artists;
+  private Set<Long> artistIds;
 
 
 
@@ -59,7 +59,12 @@ public class SongNewDTO {
     this.orderInAlbum = orderInAlbum;
   }
 
-  public Set<ArtistDTO> getArtists() {
-    return artists;
+//  public Set<ArtistDTO> getArtists() {
+//    return artists;
+//  }
+
+
+  public Set<Long> getArtistIds() {
+    return artistIds;
   }
 }
