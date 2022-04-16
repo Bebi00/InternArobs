@@ -14,15 +14,13 @@ public class Album {
     private long id;
     private String title;
     private String description;
-
     private String genre;
     private LocalDate releaseDate;
     private String label;
 
     @OneToMany(
             mappedBy = "album",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            cascade = CascadeType.PERSIST
     )
     private List<Song> songs = new ArrayList<>();
 
@@ -41,6 +39,36 @@ public class Album {
         this.genre = genre;
         this.releaseDate = releaseDate;
         this.label = label;
+    }
+
+    public void addSong(Song song) {
+        songs.add(song);
+        song.setAlbum(this);
+    }
+
+    public void removeSong(Song song) {
+        songs.remove(song);
+        song.setAlbum(null);
+    }
+
+    public void setBand(Band band) {
+        this.band = band;
+        band.getAlbums().add(this);
+    }
+
+    public void removeBand(Band band) {
+        this.band = null;
+        band.getAlbums().remove(this);
+    }
+
+    public void setArtist(Artist artist) {
+        this.artist = artist;
+        artist.getAlbums().add(this);
+    }
+
+    public void removeArtist(Artist artist) {
+        this.artist = null;
+        artist.getAlbums().remove(this);
     }
 
     public List<Song> getSongs() {
@@ -98,6 +126,14 @@ public class Album {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public Artist getArtist() {
+        return artist;
+    }
+
+    public Band getBand() {
+        return band;
     }
 
 }

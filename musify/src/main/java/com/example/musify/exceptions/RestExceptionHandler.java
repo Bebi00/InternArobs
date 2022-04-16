@@ -62,4 +62,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("The Alternative Title with the given id was not found.");
         return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InvalidAlbumException.class)
+    protected ResponseEntity<Object> handleInvalidAlbumException(InvalidAlbumException e){
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
+        log.error("The Album with the given id was not found.");
+        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+    }
 }

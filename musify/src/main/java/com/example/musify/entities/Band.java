@@ -81,4 +81,8 @@ public class Band {
     public void setEndDateActivePeriod(String endDateActivePeriod) {
         this.endDateActivePeriod = endDateActivePeriod;
     }
+
+    public List<Album> getAlbums() {
+        return albums;
+    }
 }
