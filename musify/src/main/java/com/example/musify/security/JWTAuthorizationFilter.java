@@ -60,7 +60,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             try {
                 throw new InvalidTokenException("Token is not valid");
             } catch (InvalidTokenException e) {
-                e.printStackTrace();
+
             }
         }
 

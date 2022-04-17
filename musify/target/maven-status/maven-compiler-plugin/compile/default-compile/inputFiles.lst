@@ -1,5 +1,7 @@
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\repo\ArtistRepo.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\PlaylistDTO.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\ApiError.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\PlaylistNewDTO.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\BandNewDTO.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\InvalidAlternativeTitleException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\AlternativeTitleMapper.java
@@ -8,13 +10,16 @@ C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musif
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\TokenRowMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\SongMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\MusifyApplication.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\controllers\PlaylistController.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\controllers\ArtistController.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\controllers\AlbumController.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\DAO.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\service\PlaylistService.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\InvalidAlbumException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\UnauthorizedException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\ArtistDTO.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\Album.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\PlaylistMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\security\JWTAuthorizationFilter.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\User.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\InvalidArtistException.java
@@ -34,6 +39,7 @@ C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musif
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\security\WebSecurity.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\AlternativeTitle.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\controllers\UsersController.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\repo\PlaylistRepo.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\service\AlbumService.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\AlbumMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\storage\repository\ArtistRepository.java
@@ -48,6 +54,7 @@ C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musif
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\security\PasswordEncryption.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\UserMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\AlbumDTO.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\InvalidPlaylistException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\repo\AlternativeTitleRepo.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\UserDTO.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\storage\hibernate\HibernateUtil.java

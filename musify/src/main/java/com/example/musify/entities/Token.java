@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 public class Token {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long tokenId;
 
   private String token;
@@ -21,6 +21,10 @@ public class Token {
     this.tokenId = tokenId;
     this.token = token;
     this.expiryDate = expiryDate;
+  }
+
+  public Token() {
+
   }
 
   public long getTokenId() {

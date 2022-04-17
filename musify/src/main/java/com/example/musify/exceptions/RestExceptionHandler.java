@@ -69,4 +69,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("The Album with the given id was not found.");
         return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InvalidPlaylistException.class)
+    protected ResponseEntity<Object> handleInvalidPlaylistException(InvalidPlaylistException e){
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
+        log.error("The Playlist with the given id was not found.");
+        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+    }
 }

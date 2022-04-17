@@ -21,31 +21,14 @@ public class User {
     private int role;
     private int active;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(name = "users_playlists",
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "playlist_id"))
-    private Set<Playlist> playlists =new HashSet<>();
+   @ManyToMany(mappedBy = "users")
+   private Set<Playlist> playlists =new HashSet<>();
 
     @OneToMany(
             mappedBy = "user",
-            cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private List<Token> tokens = new ArrayList<>();
-
-    public void addPlaylist(Playlist playlist){
-        playlists.add(playlist);
-        playlist.getUsers().add(this);
-    }
-
-    public void removePlaylist(Playlist playlist){
-        playlists.remove(playlist);
-        playlist.getUsers().remove(this);
-    }
 
 
     public User(Integer id, String firstName, String lastName, String email, String password, String countryOfOrigin, int role, int active) {
@@ -125,6 +108,10 @@ public class User {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    public Set<Playlist> getPlaylists() {
+        return playlists;
     }
 }
 

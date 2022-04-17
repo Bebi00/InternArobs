@@ -1,8 +1,8 @@
 package com.example.musify.entities;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,21 +11,26 @@ import java.util.Set;
 public class Playlist {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
   private Long ownerUser;
-  private Boolean type;
-  private java.sql.Date createdDate;
-  private java.sql.Timestamp lastUpdatedDate;
+  private String type;
+  private LocalDate createdDate;
+  private LocalDateTime lastUpdatedDate;
 
   @ManyToMany(mappedBy = "playlists")
   private Set<Song> songs = new HashSet<>();
 
-  @ManyToMany(mappedBy = "playlists")
-  private Set<User> users = new HashSet<>();
+  @ManyToMany(cascade = {
+          CascadeType.MERGE
+  })
+  @JoinTable(name = "users_playlists",
+          joinColumns = @JoinColumn(name = "playlist_id"),
+          inverseJoinColumns = @JoinColumn(name = "user_id"))
+  private Set<User> users =new HashSet<>();
 
-  public Playlist(Long id, String name, Long ownerUser, Boolean type, Date createdDate, Timestamp lastUpdatedDate) {
+  public Playlist(Long id, String name, Long ownerUser, String type, LocalDate createdDate, LocalDateTime lastUpdatedDate) {
     this.id = id;
     this.name = name;
     this.ownerUser = ownerUser;
@@ -36,6 +41,16 @@ public class Playlist {
 
   public Playlist() {
 
+  }
+
+  public void addUser(User user){
+    users.add(user);
+    user.getPlaylists().add(this);
+  }
+
+  public void removeUser(User user){
+    users.remove(user);
+    user.getPlaylists().remove(this);
   }
 
   public Set<Song> getSongs() {
@@ -81,29 +96,29 @@ public class Playlist {
   }
 
 
-  public Boolean getType() {
+  public String getType() {
     return type;
   }
 
-  public void setType(Boolean type) {
+  public void setType(String type) {
     this.type = type;
   }
 
 
-  public java.sql.Date getCreatedDate() {
+  public LocalDate getCreatedDate() {
     return createdDate;
   }
 
-  public void setCreatedDate(java.sql.Date createdDate) {
+  public void setCreatedDate(LocalDate createdDate) {
     this.createdDate = createdDate;
   }
 
 
-  public java.sql.Timestamp getLastUpdatedDate() {
+  public LocalDateTime getLastUpdatedDate() {
     return lastUpdatedDate;
   }
 
-  public void setLastUpdatedDate(java.sql.Timestamp lastUpdatedDate) {
+  public void setLastUpdatedDate(LocalDateTime lastUpdatedDate) {
     this.lastUpdatedDate = lastUpdatedDate;
   }
 
