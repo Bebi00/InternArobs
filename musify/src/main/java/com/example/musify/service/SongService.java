@@ -5,15 +5,18 @@ import com.example.musify.dto.AlternativeTitleNewDTO;
 import com.example.musify.dto.SongDTO;
 import com.example.musify.dto.SongNewDTO;
 import com.example.musify.entities.AlternativeTitle;
+import com.example.musify.entities.Playlist;
 import com.example.musify.entities.Song;
 import com.example.musify.exceptions.InvalidSongException;
+import com.example.musify.exceptions.SongNotFoundException;
 import com.example.musify.mapper.AlternativeTitleMapper;
-import com.example.musify.mapper.ArtistMapper;
 import com.example.musify.mapper.SongMapper;
 import com.example.musify.repo.AlternativeTitleRepo;
 import com.example.musify.repo.ArtistRepo;
+import com.example.musify.repo.PlaylistRepo;
 import com.example.musify.repo.SongRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,19 +27,21 @@ public class SongService {
     private final SongRepo songRepo;
     private final SongMapper songMapper;
     private final ArtistRepo artistRepo;
-    private final ArtistMapper artistMapper;
     private final AlternativeTitleRepo alternativeTitleRepo;
     private final AlternativeTitleMapper alternativeTitleMapper;
+    private final PlaylistRepo playlistRepo;
+    private final JdbcTemplate jdbcTemplate;
 
 
     @Autowired
-    public SongService(SongRepo songRepo, SongMapper songMapper, ArtistRepo artistRepo, ArtistMapper artistMapper, AlternativeTitleRepo alternativeTitleRepo, AlternativeTitleMapper alternativeTitleMapper) {
+    public SongService(SongRepo songRepo, SongMapper songMapper, ArtistRepo artistRepo, AlternativeTitleRepo alternativeTitleRepo, AlternativeTitleMapper alternativeTitleMapper, PlaylistRepo playlistRepo, JdbcTemplate jdbcTemplate) {
         this.songRepo = songRepo;
         this.songMapper = songMapper;
         this.artistRepo = artistRepo;
-        this.artistMapper = artistMapper;
+        this.playlistRepo = playlistRepo;
         this.alternativeTitleRepo = alternativeTitleRepo;
         this.alternativeTitleMapper = alternativeTitleMapper;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
 
@@ -117,5 +122,20 @@ public class SongService {
         AlternativeTitle alternativeTitle = alternativeTitleRepo.getById(id);
         alternativeTitle.getSong().removeAlternativeTitle(alternativeTitle);
         return alternativeTitleMapper.toDTO(alternativeTitle);
+    }
+
+    @Transactional
+    public SongDTO addToPlaylist(Long songId,Long playlistId){
+        Song song = songRepo.findSongById(songId);
+        Playlist playlist = playlistRepo.findPlaylistById(playlistId);
+        if(song == null){
+            throw new SongNotFoundException("Song with the given id was not found");
+        }
+        if(playlist == null){
+            throw new SongNotFoundException("Playlist with the given id was not found");
+        }
+        song.addPlaylist(playlist);
+        songRepo.save(song);
+        return songMapper.toDTO(songRepo.save(song));
     }
 }

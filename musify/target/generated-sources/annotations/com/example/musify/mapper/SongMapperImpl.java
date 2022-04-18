@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-04-17T23:41:50+0300",
+    date = "2022-04-18T10:35:33+0300",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -28,7 +28,6 @@ public class SongMapperImpl implements SongMapper {
         songDTO.setTitle( song.getTitle() );
         songDTO.setDuration( song.getDuration() );
         songDTO.setCreationDate( song.getCreationDate() );
-        songDTO.setOrderInAlbum( song.getOrderInAlbum() );
 
         return songDTO;
     }
@@ -45,7 +44,6 @@ public class SongMapperImpl implements SongMapper {
         song.setTitle( SongDTO.getTitle() );
         song.setDuration( SongDTO.getDuration() );
         song.setCreationDate( SongDTO.getCreationDate() );
-        song.setOrderInAlbum( SongDTO.getOrderInAlbum() );
 
         return song;
     }
@@ -62,7 +60,6 @@ public class SongMapperImpl implements SongMapper {
         song.setTitle( songNewDTO.getTitle() );
         song.setDuration( songNewDTO.getDuration() );
         song.setCreationDate( songNewDTO.getCreationDate() );
-        song.setOrderInAlbum( songNewDTO.getOrderInAlbum() );
 
         return song;
     }

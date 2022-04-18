@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -20,7 +21,7 @@ public class Playlist {
   private LocalDateTime lastUpdatedDate;
 
   @ManyToMany(mappedBy = "playlists")
-  private Set<Song> songs = new HashSet<>();
+  private Set<Song> songs = new LinkedHashSet<>();
 
   @ManyToMany(cascade = {
           CascadeType.MERGE

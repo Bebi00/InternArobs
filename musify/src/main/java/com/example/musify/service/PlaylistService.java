@@ -48,15 +48,19 @@ public class PlaylistService {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String date = formatter.format(calendar.getTime());
         newPlaylist.setCreatedDate(LocalDate.parse(date));
-        return playlistMapper.toDTO(playlistRepo.save(newPlaylist));
+
+        if(playlistNewDTO.getType().equals("public") || playlistNewDTO.getType().equals("private")){
+            return playlistMapper.toDTO(playlistRepo.save(newPlaylist));
+        }else{
+            throw new InvalidPlaylistException("Invalid Type of the playlist");
+        }
+
     }
 
     @Transactional
     public PlaylistDTO updatePlaylist(PlaylistNewDTO playlistNewDTO) {
-        Playlist updatedPlaylist;
-        try {
-            updatedPlaylist = playlistRepo.findPlaylistById(playlistNewDTO.getId());
-        } catch (Exception e) {
+        Playlist updatedPlaylist = playlistRepo.findPlaylistById(playlistNewDTO.getId());
+       if(updatedPlaylist == null){
             throw new InvalidPlaylistException();
         }
 
@@ -66,8 +70,11 @@ public class PlaylistService {
         if (!updatedPlaylist.getType().equals(playlistNewDTO.getType())) {
             updatedPlaylist.setType(playlistNewDTO.getType());
         }
+        if(!playlistNewDTO.getType().equals("public") || !playlistNewDTO.getType().equals("private")){
+            throw new InvalidPlaylistException("Invalid Type for the playlist");
+        }
 
-        // for getting the update time from database in real time
+        // for getting the update time in real time
         LocalDateTime localDateTime = LocalDateTime.now();
         updatedPlaylist.setLastUpdatedDate(localDateTime);
         return playlistMapper.toDTO(playlistRepo.save(updatedPlaylist));

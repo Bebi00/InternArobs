@@ -7,6 +7,7 @@ C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musif
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\AlternativeTitleMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\security\JWTUtils.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\Song.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\RepeatedSongException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\TokenRowMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\SongMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\MusifyApplication.java
@@ -18,6 +19,7 @@ C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musif
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\InvalidAlbumException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\UnauthorizedException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\dto\ArtistDTO.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\SongNotFoundException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\Album.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\PlaylistMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\security\JWTAuthorizationFilter.java
@@ -33,6 +35,7 @@ C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musif
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\service\ArtistService.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\Band.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\storage\controllers\HelloController.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\PlaylistNotFoundException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\repo\UserRepo.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\repo\SongRepo.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\BandMapper.java

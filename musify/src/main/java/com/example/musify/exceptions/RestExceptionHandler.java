@@ -52,28 +52,49 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidSongException.class)
     protected ResponseEntity<Object> handleInvalidSongException(InvalidSongException e){
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
-        log.error("Song with the given id was not found.");
-        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,e.getMessage());
+        log.error(e.getMessage());
+        return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(InvalidAlternativeTitleException.class)
     protected ResponseEntity<Object> handleInvalidSongException(InvalidAlternativeTitleException e){
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
-        log.error("The Alternative Title with the given id was not found.");
+        log.error(e.getMessage());
         return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidAlbumException.class)
     protected ResponseEntity<Object> handleInvalidAlbumException(InvalidAlbumException e){
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
-        log.error("The Album with the given id was not found.");
+        log.error(e.getMessage());
         return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidPlaylistException.class)
     protected ResponseEntity<Object> handleInvalidPlaylistException(InvalidPlaylistException e){
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,e.getMessage());
+        log.error("Invalid playlsit data");
+        return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PlaylistNotFoundException.class)
+    protected ResponseEntity<Object> handlePlaylistNotFoundException(PlaylistNotFoundException e){
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
         log.error("The Playlist with the given id was not found.");
         return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(SongNotFoundException.class)
+    protected ResponseEntity<Object> handleSongNotFoundException(SongNotFoundException e){
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
+        log.error("The Song with the given id was not found.");
+        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RepeatedSongException.class)
+    protected ResponseEntity<Object> handleRepeatedSongException(RepeatedSongException e){
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,e.getMessage());
+        log.error(e.getMessage());
+        return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
     }
 }

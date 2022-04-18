@@ -2,8 +2,8 @@ package com.example.musify.entities;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "albums")
@@ -22,7 +22,7 @@ public class Album {
             mappedBy = "album",
             cascade = CascadeType.PERSIST
     )
-    private List<Song> songs = new ArrayList<>();
+    private Set<Song> songs = new LinkedHashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Artist artist;
@@ -71,7 +71,7 @@ public class Album {
         artist.getAlbums().remove(this);
     }
 
-    public List<Song> getSongs() {
+    public Set<Song> getSongs() {
         return songs;
     }
 

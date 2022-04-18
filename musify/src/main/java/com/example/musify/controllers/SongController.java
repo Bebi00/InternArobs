@@ -72,4 +72,9 @@ public class SongController {
     public ResponseEntity<List<AlternativeTitleDTO>> getAllAlternativeTitles(@PathVariable Long songId){
         return new ResponseEntity<>(songService.getAllAlternativeTitles(songId),HttpStatus.OK);
     }
+
+    @PostMapping("/addToPlaylist/")
+    public ResponseEntity<SongDTO> addToPlaylist(@RequestParam Long songId,@RequestParam Long playlistId){
+        return new ResponseEntity<>(songService.addToPlaylist(songId, playlistId),HttpStatus.OK);
+    }
 }

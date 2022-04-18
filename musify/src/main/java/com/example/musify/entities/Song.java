@@ -1,5 +1,7 @@
 package com.example.musify.entities;
 
+import com.example.musify.exceptions.RepeatedSongException;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,9 +23,6 @@ public class Song {
 
     @Column(name = "creation_date")
     private java.sql.Date creationDate;
-
-    @Column(name = "order_in_album")
-    private long orderInAlbum;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Album album;
@@ -57,6 +56,9 @@ public class Song {
 
     public void addPlaylist(Playlist playlist) {
         playlists.add(playlist);
+        if(playlist.getSongs().contains(this)){
+            throw new RepeatedSongException("Song already in the playlist");
+        }
         playlist.getSongs().add(this);
     }
 
@@ -127,14 +129,6 @@ public class Song {
 
     public void setDuration(Long duration) {
         this.duration = duration;
-    }
-
-    public long getOrderInAlbum() {
-        return orderInAlbum;
-    }
-
-    public void setOrderInAlbum(long orderInAlbum) {
-        this.orderInAlbum = orderInAlbum;
     }
 
     public Album getAlbum() {
