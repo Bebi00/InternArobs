@@ -6,10 +6,7 @@ import com.example.musify.dto.SongDTO;
 import com.example.musify.entities.Playlist;
 import com.example.musify.entities.Song;
 import com.example.musify.entities.User;
-import com.example.musify.exceptions.InvalidPlaylistException;
-import com.example.musify.exceptions.RepeatedPlaylistException;
-import com.example.musify.exceptions.SongNotFoundException;
-import com.example.musify.exceptions.UnauthorizedException;
+import com.example.musify.exceptions.*;
 import com.example.musify.mapper.PlaylistMapper;
 import com.example.musify.mapper.SongMapper;
 import com.example.musify.repo.PlaylistRepo;
@@ -23,8 +20,7 @@ import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PlaylistService {
@@ -120,7 +116,7 @@ public class PlaylistService {
         if (playlist.getSongs().contains(song)) {
             LocalDateTime localDateTime = LocalDateTime.now();
             playlist.setLastUpdatedDate(localDateTime);
-            song.removePlaylist(playlist);
+            playlist.removeSong(song);
             return songMapper.toDTO(songRepo.save(song));
         } else {
             throw new SongNotFoundException("The song is not in the playlist");
@@ -128,7 +124,7 @@ public class PlaylistService {
     }
 
     @Transactional
-    public PlaylistDTO followPlaylist(Long id){
+    public PlaylistDTO followPlaylist(Long id) throws UnauthorizedException {
         Playlist playlist = playlistRepo.findPlaylistById(id);
         if (playlist == null) {
             throw new SongNotFoundException("Playlist with the given id was not found");
@@ -141,7 +137,59 @@ public class PlaylistService {
         if(playlist.getUsers().contains(user)){
             throw new RepeatedPlaylistException("The user already follows this playlist");
         }
+        if (!playlist.getType().equals("public")){
+            throw new UnauthorizedException("The playlist is not public.");
+        }
         playlist.addUser(user);
         return playlistMapper.toDTO(playlistRepo.save(playlist));
+    }
+
+    @Transactional
+    public List<SongDTO> getSongsFromPlaylist(Long playlistId){
+        Playlist playlist = playlistRepo.findPlaylistById(playlistId);
+        if (playlist == null) {
+            throw new SongNotFoundException("Playlist with the given id was not found");
+        }
+        List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepo.getById((Integer) userInfo.get(0)).get();
+        if (!playlist.getType().equals("public")){
+            if ((int)user.getId() != playlist.getOwnerUser()) {
+                throw new UnauthorizedException("The playlist is not public.");
+            }
+        }
+
+        return (songMapper.toDTOs(new LinkedList<>(playlist.getSongs())));
+    }
+
+    @Transactional
+    public List<SongDTO> changeSongOrder(Long playlistId,Long songId,Integer oldPosition,Integer newPosition){
+        Playlist playlist = playlistRepo.findPlaylistById(playlistId);
+        Song song = songRepo.findSongById(songId);
+        if (playlist == null) {
+            throw new SongNotFoundException("Playlist with the given id was not found");
+        }
+        if (song == null) {
+            throw new SongNotFoundException("Song with the given id was not found");
+        }
+        List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepo.getById((Integer) userInfo.get(0)).get();
+        if ((int)user.getId() != playlist.getOwnerUser()) {
+            throw new UnauthorizedException("Only the owner can modify the playlist.");
+        }
+        LinkedList<Song> songs = new LinkedList<>(playlist.getSongs());
+        if(oldPosition < 1 || oldPosition > songs.size() || newPosition < 1 || newPosition > songs.size() ){
+            throw new IllegalArgumentException("The positions of the song are not in range.");
+        }
+        if(songs.get(oldPosition-1).getId() != songId){
+            throw new InvalidSongException("The song introduced is not in the correct position");
+        }
+        if(!oldPosition.equals(newPosition)){
+            song = songs.get(oldPosition-1);
+            songs.remove(song);
+            songs.add(newPosition-1,song);
+            playlist.setSongs(songs);
+//            playlistRepo.save(playlist);
+        }
+        return (songMapper.toDTOs((playlistRepo.save(playlist).getSongs())));
     }
 }

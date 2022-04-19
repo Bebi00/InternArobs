@@ -19,7 +19,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AlbumService {
@@ -67,7 +66,7 @@ public class AlbumService {
         List<Song> songs = albumNewDTO.getSongIds()
                 .stream()
                 .map(songRepo::findSongById)
-                .collect(Collectors.toList());
+                .toList();
         for(Song song:songs){
             newAlbum.addSong(song);
         }
@@ -120,9 +119,9 @@ public class AlbumService {
         LocalDateTime localDateTime = LocalDateTime.now();
         playlist.setLastUpdatedDate(localDateTime);
         for (Song song:album.getSongs()){
-            song.addPlaylist(playlist);
-            songRepo.save(song);
+            playlist.addSong(song);
         }
+        playlistRepo.save(playlist);
         return albumMapper.toDTO(album);
     }
 }

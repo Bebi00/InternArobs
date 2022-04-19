@@ -1,10 +1,13 @@
 package com.example.musify.entities;
 
+import com.example.musify.exceptions.RepeatedSongException;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,8 +23,14 @@ public class Playlist {
   private LocalDate createdDate;
   private LocalDateTime lastUpdatedDate;
 
-  @ManyToMany(mappedBy = "playlists")
-  private Set<Song> songs = new LinkedHashSet<>();
+  @ManyToMany(cascade = {
+          CascadeType.MERGE
+  })
+  @JoinTable(name = "songs_playlists",
+          joinColumns = @JoinColumn(name = "playlist_id"),
+          inverseJoinColumns = @JoinColumn(name = "song_id"))
+  @OrderColumn(name = "position_in_playlist")
+  private List<Song> songs = new LinkedList<>();
 
   @ManyToMany(cascade = {
           CascadeType.MERGE
@@ -54,11 +63,24 @@ public class Playlist {
     user.getPlaylists().remove(this);
   }
 
-  public Set<Song> getSongs() {
+  public void addSong(Song song) {
+    if(this.getSongs().contains(song)){
+      throw new RepeatedSongException("Song already in the playlist");
+    }
+    songs.add(song);
+    song.getPlaylists().add(this);
+  }
+
+  public void removeSong(Song song) {
+    songs.remove(song);
+    song.getPlaylists().remove(this);
+  }
+
+  public List<Song> getSongs() {
     return songs;
   }
 
-  public void setSongs(Set<Song> songs) {
+  public void setSongs(LinkedList<Song> songs) {
     this.songs = songs;
   }
 

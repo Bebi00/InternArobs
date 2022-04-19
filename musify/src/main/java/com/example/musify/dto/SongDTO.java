@@ -8,8 +8,6 @@ public class SongDTO {
   private String title;
   private long duration;
   private java.sql.Date creationDate;
-  private long orderInAlbum;
-
 
   public long getId() {
     return id;
@@ -44,15 +42,6 @@ public class SongDTO {
 
   public void setCreationDate(java.sql.Date creationDate) {
     this.creationDate = creationDate;
-  }
-
-
-  public long getOrderInAlbum() {
-    return orderInAlbum;
-  }
-
-  public void setOrderInAlbum(long orderInAlbum) {
-    this.orderInAlbum = orderInAlbum;
   }
 
 }

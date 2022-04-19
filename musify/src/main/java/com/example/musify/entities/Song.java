@@ -1,7 +1,5 @@
 package com.example.musify.entities;
 
-import com.example.musify.exceptions.RepeatedSongException;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,13 +25,8 @@ public class Song {
     @ManyToOne(fetch = FetchType.LAZY)
     private Album album;
 
-    @ManyToMany(cascade = {
-            CascadeType.MERGE
-    })
-    @JoinTable(name = "songs_playlists",
-            joinColumns = @JoinColumn(name = "song_id"),
-            inverseJoinColumns = @JoinColumn(name = "playlist_id"))
-    private Set<Playlist> playlists = new HashSet<>();
+    @ManyToMany(mappedBy = "songs")
+    private Set<Playlist> playlists;
 
     @OneToMany(
             mappedBy = "song",
@@ -52,19 +45,6 @@ public class Song {
 
     public Song() {
 
-    }
-
-    public void addPlaylist(Playlist playlist) {
-        playlists.add(playlist);
-        if(playlist.getSongs().contains(this)){
-            throw new RepeatedSongException("Song already in the playlist");
-        }
-        playlist.getSongs().add(this);
-    }
-
-    public void removePlaylist(Playlist playlist) {
-        playlists.remove(playlist);
-        playlist.getSongs().remove(this);
     }
 
     public void addArtist(Artist artist) {

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,8 +51,18 @@ public class PlaylistController {
     }
 
     @PostMapping("/followPlaylist")
-    public ResponseEntity<PlaylistDTO> followPlaylist(@RequestParam Long playlistId){
+    public ResponseEntity<PlaylistDTO> followPlaylist(@RequestParam Long playlistId) throws UnauthorizedException {
         return new ResponseEntity<>(playlistService.followPlaylist(playlistId), HttpStatus.OK);
+    }
+
+    @GetMapping("/songs")
+    public ResponseEntity<Optional<List<SongDTO>>> getSongsFromPlaylist(@RequestParam Long playlistId){
+        return new ResponseEntity<>(Optional.of(playlistService.getSongsFromPlaylist(playlistId)), HttpStatus.OK);
+    }
+
+    @GetMapping("/changeSongOrder")
+    public ResponseEntity<Optional<List<SongDTO>>> changeSongOrder(@RequestParam Long playlistId,@RequestParam Long songId,@RequestParam Integer oldPosition,@RequestParam Integer newPosition){
+        return new ResponseEntity<>(Optional.of(playlistService.changeSongOrder(playlistId,songId,oldPosition,newPosition)), HttpStatus.OK);
     }
 
 

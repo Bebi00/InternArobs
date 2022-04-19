@@ -143,7 +143,7 @@ public class SongService {
         }
         LocalDateTime localDateTime = LocalDateTime.now();
         playlist.setLastUpdatedDate(localDateTime);
-        song.addPlaylist(playlist);
+        playlist.addSong(song);
         songRepo.save(song);
         return songMapper.toDTO(songRepo.save(song));
     }
