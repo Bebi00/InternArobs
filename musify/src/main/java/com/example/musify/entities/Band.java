@@ -36,6 +36,16 @@ public class Band {
     public Band() {
     }
 
+    public void addArtist(Artist artist){
+        artists.add(artist);
+        artist.getBands().add(this);
+    }
+
+    public void removeArtist(Artist artist){
+        artists.remove(artist);
+        artist.getBands().remove(this);
+    }
+
     public Set<Artist> getArtists() {
         return artists;
     }

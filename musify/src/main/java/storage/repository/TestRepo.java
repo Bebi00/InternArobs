@@ -1,7 +1,5 @@
 package storage.repository;
 
-import com.example.musify.entities.Artist;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,8 +15,8 @@ public class TestRepo {
         String endDate = new java.sql.Date(end.getTime()).toString();
 
 
-        Artist artist= new Artist(0L,"Marshall","Mathers","Eminem",  birth,startDate,endDate);
-        ArtistRepository artistRepo = new ArtistRepository();
+//        Artist artist= new Artist(0L,"Marshall","Mathers","Eminem",  birth,startDate,endDate);
+//        ArtistRepository artistRepo = new ArtistRepository();
 //        Artist artist1 = artistRepo.save(artist);
 //        Artist artist1 = artistRepo.delete(artist);
 //        List<Artist> artists = artistRepo.getAll();
@@ -27,7 +25,7 @@ public class TestRepo {
 //        }
 //        Artist artistUpdated= new Artist(17,"Modified","Mathers","Eminem",  birth,startDate,endDate);
 //        Artist artist1 = artistRepo.update(artistUpdated);
-        Artist artist1 = artistRepo.getById(17);
-        System.out.println(artist1.getId());
+//        Artist artist1 = artistRepo.getById(17);
+//        System.out.println(artist1.getId());
     }
 }

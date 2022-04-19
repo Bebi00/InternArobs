@@ -4,6 +4,7 @@ import com.example.musify.dto.AlternativeTitleDTO;
 import com.example.musify.dto.AlternativeTitleNewDTO;
 import com.example.musify.dto.SongDTO;
 import com.example.musify.dto.SongNewDTO;
+import com.example.musify.exceptions.UnauthorizedException;
 import com.example.musify.service.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -74,7 +75,7 @@ public class SongController {
     }
 
     @PostMapping("/addToPlaylist/")
-    public ResponseEntity<SongDTO> addToPlaylist(@RequestParam Long songId,@RequestParam Long playlistId){
+    public ResponseEntity<SongDTO> addToPlaylist(@RequestParam Long songId,@RequestParam Long playlistId) throws UnauthorizedException {
         return new ResponseEntity<>(songService.addToPlaylist(songId, playlistId),HttpStatus.OK);
     }
 }

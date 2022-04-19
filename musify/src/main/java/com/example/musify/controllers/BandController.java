@@ -22,27 +22,27 @@ public class BandController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<BandDTO>> getBands(){
-        return new ResponseEntity<>(bandService.getAll(), HttpStatus.OK );
+    public ResponseEntity<Optional<List<BandDTO>>> getBands(){
+        return new ResponseEntity<>(Optional.of(bandService.getAll()), HttpStatus.OK );
     }
 
     @GetMapping("/{bandName}")
     public ResponseEntity<Optional<BandDTO>> getBandByBandName(@PathVariable String bandName){
-        return new ResponseEntity<>(bandService.getByBandName(bandName),HttpStatus.OK);
+        return new ResponseEntity<>(Optional.of(bandService.getByBandName(bandName)),HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Optional<BandDTO>> saveBand(@RequestBody BandNewDTO bandDTO){
+    public ResponseEntity<BandDTO> saveBand(@RequestBody BandNewDTO bandDTO){
         return new ResponseEntity<>(bandService.saveBand(bandDTO),HttpStatus.OK);
     }
 
     @PostMapping("/remove/{id}")
-    public ResponseEntity<Optional<BandDTO>> removeBand(@PathVariable Long id){
+    public ResponseEntity<BandDTO> removeBand(@PathVariable Long id){
         return new ResponseEntity<>(bandService.removeById(id),HttpStatus.OK);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<Optional<BandDTO>> updateBand(@RequestBody BandNewDTO bandDTO){
+    public ResponseEntity<BandDTO> updateBand(@RequestBody BandNewDTO bandDTO){
         return new ResponseEntity<>(bandService.updateById(bandDTO),HttpStatus.OK);
     }
 }

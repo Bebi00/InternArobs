@@ -3,6 +3,7 @@ package com.example.musify.dto;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Component
 public class UserDTO {
@@ -94,5 +95,18 @@ public class UserDTO {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTO userDTO = (UserDTO) o;
+        return role == userDTO.role && active == userDTO.active && Objects.equals(id, userDTO.id) && Objects.equals(firstName, userDTO.firstName) && Objects.equals(lastName, userDTO.lastName) && Objects.equals(email, userDTO.email) && Objects.equals(password, userDTO.password) && Objects.equals(countryOfOrigin, userDTO.countryOfOrigin);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, email, password, countryOfOrigin, role, active);
     }
 }

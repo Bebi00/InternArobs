@@ -12,7 +12,7 @@ public class BandNewDTO {
   private String location;
   private String startDateActivePeriod;
   private String endDateActivePeriod;
-  private Set<ArtistDTO> artists;
+  private Set<Long> artistsIds;
 
 
   public Long getId() {
@@ -59,7 +59,7 @@ public class BandNewDTO {
     this.endDateActivePeriod = endDateActivePeriod;
   }
 
-  public Set<ArtistDTO> getArtists() {
-    return artists;
+  public Set<Long> getArtistsIds() {
+    return artistsIds;
   }
 }

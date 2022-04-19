@@ -3,6 +3,8 @@ package com.example.musify.controllers;
 
 import com.example.musify.dto.PlaylistDTO;
 import com.example.musify.dto.PlaylistNewDTO;
+import com.example.musify.dto.SongDTO;
+import com.example.musify.exceptions.UnauthorizedException;
 import com.example.musify.service.PlaylistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,8 +30,8 @@ public class PlaylistController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<PlaylistDTO> addPlaylist(@RequestBody PlaylistNewDTO playlistNewDTO){
-        return new ResponseEntity<>(playlistService.savePlaylist(playlistNewDTO),HttpStatus.OK);
+    public ResponseEntity<PlaylistDTO> addPlaylist(@RequestParam String name, @RequestParam String type){
+        return new ResponseEntity<>(playlistService.savePlaylist(name, type),HttpStatus.OK);
     }
 
     @PostMapping("/update")
@@ -41,4 +43,16 @@ public class PlaylistController {
     public ResponseEntity<PlaylistDTO> removePlaylistById(@PathVariable Long id){
         return new ResponseEntity<>(playlistService.removePlaylistById(id), HttpStatus.OK);
     }
+
+    @PostMapping("/removeSong")
+    public ResponseEntity<SongDTO> removePlaylistById(@RequestParam Long songId, @RequestParam Long playlistId) throws UnauthorizedException {
+        return new ResponseEntity<>(playlistService.removeSongFromPlaylistById(songId, playlistId), HttpStatus.OK);
+    }
+
+    @PostMapping("/followPlaylist")
+    public ResponseEntity<PlaylistDTO> followPlaylist(@RequestParam Long playlistId){
+        return new ResponseEntity<>(playlistService.followPlaylist(playlistId), HttpStatus.OK);
+    }
+
+
 }

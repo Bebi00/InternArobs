@@ -9,6 +9,7 @@ import com.example.musify.entities.Playlist;
 import com.example.musify.entities.Song;
 import com.example.musify.exceptions.InvalidSongException;
 import com.example.musify.exceptions.SongNotFoundException;
+import com.example.musify.exceptions.UnauthorizedException;
 import com.example.musify.mapper.AlternativeTitleMapper;
 import com.example.musify.mapper.SongMapper;
 import com.example.musify.repo.AlternativeTitleRepo;
@@ -17,9 +18,11 @@ import com.example.musify.repo.PlaylistRepo;
 import com.example.musify.repo.SongRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -125,15 +128,21 @@ public class SongService {
     }
 
     @Transactional
-    public SongDTO addToPlaylist(Long songId,Long playlistId){
+    public SongDTO addToPlaylist(Long songId,Long playlistId) throws UnauthorizedException {
+        List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Song song = songRepo.findSongById(songId);
         Playlist playlist = playlistRepo.findPlaylistById(playlistId);
+        if(playlist.getOwnerUser() != (int) userInfo.get(0)){
+            throw new UnauthorizedException("Only the owner of the playlist can modify its content");
+        }
         if(song == null){
             throw new SongNotFoundException("Song with the given id was not found");
         }
         if(playlist == null){
             throw new SongNotFoundException("Playlist with the given id was not found");
         }
+        LocalDateTime localDateTime = LocalDateTime.now();
+        playlist.setLastUpdatedDate(localDateTime);
         song.addPlaylist(playlist);
         songRepo.save(song);
         return songMapper.toDTO(songRepo.save(song));

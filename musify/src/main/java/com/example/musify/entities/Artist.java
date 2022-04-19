@@ -1,7 +1,7 @@
 package com.example.musify.entities;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +25,7 @@ public class Artist{
     private String stageName;
 
     @Column(name = "birthday")
-    private java.sql.Date birthday;
+    private LocalDate birthday;
 
     @Column(name = "start_date_active_period")
     private String startDateActivePeriod;
@@ -50,7 +50,7 @@ public class Artist{
     public Artist() {
     }
 
-    public Artist(Long id, String firstName, String lastName, String stageName, Date birthday, String startDateActivePeriod, String endDateActivePeriod) {
+    public Artist(Long id, String firstName, String lastName, String stageName, LocalDate birthday, String startDateActivePeriod, String endDateActivePeriod) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -104,11 +104,11 @@ public class Artist{
         this.stageName = stageName;
     }
 
-    public java.sql.Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(java.sql.Date birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 

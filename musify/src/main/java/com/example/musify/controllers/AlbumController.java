@@ -3,6 +3,7 @@ package com.example.musify.controllers;
 import com.example.musify.dto.AlbumDTO;
 import com.example.musify.dto.AlbumNewDTO;
 import com.example.musify.exceptions.InvalidArtistException;
+import com.example.musify.exceptions.UnauthorizedException;
 import com.example.musify.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,11 @@ public class AlbumController {
     @PostMapping("/updateById")
     public ResponseEntity<AlbumDTO> updateAlbumById(@RequestBody AlbumNewDTO albumNewDTO) throws InvalidArtistException {
         return new ResponseEntity<>(albumService.updateAlbumById(albumNewDTO),HttpStatus.OK);
+    }
+
+    @PostMapping("/addToPlaylist/")
+    public ResponseEntity<AlbumDTO> addToPlaylist(@RequestParam Long albumId, @RequestParam Long playlistId) throws UnauthorizedException {
+        return new ResponseEntity<>(albumService.addToPlaylist(albumId, playlistId),HttpStatus.OK);
     }
 
 }

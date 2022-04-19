@@ -22,32 +22,32 @@ public class ArtistController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ArtistDTO>> getArtists(){
-        return new ResponseEntity<>(artistService.getAll(), HttpStatus.OK   );
+    public ResponseEntity<Optional<List<ArtistDTO>>> getArtists(){
+        return new ResponseEntity<>(Optional.of(artistService.getAll()), HttpStatus.OK   );
     }
 
     @GetMapping("/byStageName{stageName}")
     public ResponseEntity<Optional<ArtistDTO>> getArtistByStageName(@PathVariable String stageName){
-        return new ResponseEntity<>(artistService.getByStageName(stageName),HttpStatus.OK);
+        return new ResponseEntity<>(Optional.of(artistService.getByStageName(stageName)),HttpStatus.OK);
     }
 
     @GetMapping("/byId{id}")
     public ResponseEntity<Optional<ArtistDTO>> getArtistByStageName(@PathVariable Long id){
-        return new ResponseEntity<>(artistService.getById(id),HttpStatus.OK);
+        return new ResponseEntity<>(Optional.of(artistService.getById(id)),HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Optional<ArtistDTO>> saveArtist(@RequestBody ArtistDTO artistDTO){
+    public ResponseEntity<ArtistDTO> saveArtist(@RequestBody ArtistDTO artistDTO){
         return new ResponseEntity<>(artistService.saveArtist(artistDTO),HttpStatus.OK);
     }
 
     @PostMapping("/remove/{id}")
-    public ResponseEntity<Optional<ArtistDTO>> removeArtist(@PathVariable Long id){
+    public ResponseEntity<ArtistDTO> removeArtist(@PathVariable Long id){
         return new ResponseEntity<>(artistService.removeById(id),HttpStatus.OK);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<Optional<ArtistDTO>> updateArtist(@RequestBody ArtistDTO artistDTO){
+    public ResponseEntity<ArtistDTO> updateArtist(@RequestBody ArtistDTO artistDTO){
         return new ResponseEntity<>(artistService.updateById(artistDTO),HttpStatus.OK);
     }
 }

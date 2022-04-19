@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ArtistService {
@@ -27,29 +26,29 @@ public class ArtistService {
         return artistMapper.toDTOs(artistRepo.findAll());
     }
 
-    public Optional<ArtistDTO> getByStageName(String stageName) {
-        return Optional.of(artistMapper.toDTO(artistRepo.findByStageName(stageName)));
+    public ArtistDTO getByStageName(String stageName) {
+        return artistMapper.toDTO(artistRepo.findByStageName(stageName));
     }
 
-    public Optional<ArtistDTO> getById(Long id) {
-        return Optional.of(artistMapper.toDTO(artistRepo.findArtistById(id)));
+    public ArtistDTO getById(Long id) {
+        return artistMapper.toDTO(artistRepo.findArtistById(id));
     }
 
     @Transactional
-    public Optional<ArtistDTO> saveArtist(ArtistDTO artistDTO) {
+    public ArtistDTO saveArtist(ArtistDTO artistDTO) {
         Artist artist = artistRepo.save(artistMapper.toEntity(artistDTO));
-        return Optional.of(artistMapper.toDTO(artist));
+        return artistMapper.toDTO(artist);
     }
 
     @Transactional
-    public Optional<ArtistDTO> removeById(Long id) {
+    public ArtistDTO removeById(Long id) {
         Artist oldArtist = artistRepo.getById(id);
         artistRepo.removeArtistById(id);
-        return Optional.of(artistMapper.toDTO(oldArtist));
+        return artistMapper.toDTO(oldArtist);
     }
 
     @Transactional
-    public Optional<ArtistDTO> updateById(ArtistDTO artistDTO){
+    public ArtistDTO updateById(ArtistDTO artistDTO){
        return saveArtist(artistDTO);
     }
 }

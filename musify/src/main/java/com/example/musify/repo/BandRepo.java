@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BandRepo extends JpaRepository<Band, Long> {
-    Band findByBandName(String bandName);
+    Band findBandByBandName(String bandName);
+    Band findBandById(Long id);
     void removeBandById(Long id);
 }

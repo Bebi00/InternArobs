@@ -18,8 +18,8 @@ public class User {
     private String email;
     private String password;
     private String countryOfOrigin;
-    private int role;
-    private int active;
+    private Integer role;
+    private Integer active;
 
    @ManyToMany(mappedBy = "users")
    private Set<Playlist> playlists =new HashSet<>();
@@ -43,7 +43,6 @@ public class User {
     }
 
     public User() {
-
     }
 
     public Integer getId() {

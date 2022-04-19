@@ -73,7 +73,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidPlaylistException.class)
     protected ResponseEntity<Object> handleInvalidPlaylistException(InvalidPlaylistException e){
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,e.getMessage());
-        log.error("Invalid playlsit data");
+        log.error("Invalid playlist data");
         return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
     }
 
@@ -96,5 +96,26 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,e.getMessage());
         log.error(e.getMessage());
         return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    protected ResponseEntity<Object> handleUnauthorizedException(UnauthorizedException e){
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,e.getMessage());
+        log.error(e.getMessage());
+        return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RepeatedPlaylistException.class)
+    protected ResponseEntity<Object> handleRepeatedSongException(RepeatedPlaylistException e){
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,e.getMessage());
+        log.error(e.getMessage());
+        return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AlbumNotFoundException.class)
+    protected ResponseEntity<Object> handleSongNotFoundException(AlbumNotFoundException e){
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
+        log.error(e.getMessage());
+        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
     }
 }

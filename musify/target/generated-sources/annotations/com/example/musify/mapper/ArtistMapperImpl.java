@@ -2,6 +2,8 @@ package com.example.musify.mapper;
 
 import com.example.musify.dto.ArtistDTO;
 import com.example.musify.entities.Artist;
+import java.sql.Date;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -9,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-04-18T10:35:33+0300",
+    date = "2022-04-19T14:53:27+0300",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -29,7 +31,9 @@ public class ArtistMapperImpl implements ArtistMapper {
         artistDTO.setFirstName( artist.getFirstName() );
         artistDTO.setLastName( artist.getLastName() );
         artistDTO.setStageName( artist.getStageName() );
-        artistDTO.setBirthday( artist.getBirthday() );
+        if ( artist.getBirthday() != null ) {
+            artistDTO.setBirthday( new Date( artist.getBirthday().atStartOfDay( ZoneOffset.UTC ).toInstant().toEpochMilli() ) );
+        }
         artistDTO.setStartDateActivePeriod( artist.getStartDateActivePeriod() );
         artistDTO.setEndDateActivePeriod( artist.getEndDateActivePeriod() );
 
@@ -48,7 +52,9 @@ public class ArtistMapperImpl implements ArtistMapper {
         artist.setFirstName( artistDTO.getFirstName() );
         artist.setLastName( artistDTO.getLastName() );
         artist.setStageName( artistDTO.getStageName() );
-        artist.setBirthday( artistDTO.getBirthday() );
+        if ( artistDTO.getBirthday() != null ) {
+            artist.setBirthday( artistDTO.getBirthday().toLocalDate() );
+        }
         artist.setStartDateActivePeriod( artistDTO.getStartDateActivePeriod() );
         artist.setEndDateActivePeriod( artistDTO.getEndDateActivePeriod() );
 
@@ -67,7 +73,9 @@ public class ArtistMapperImpl implements ArtistMapper {
         artist.setFirstName( artistDTO.getFirstName() );
         artist.setLastName( artistDTO.getLastName() );
         artist.setStageName( artistDTO.getStageName() );
-        artist.setBirthday( artistDTO.getBirthday() );
+        if ( artistDTO.getBirthday() != null ) {
+            artist.setBirthday( artistDTO.getBirthday().toLocalDate() );
+        }
         artist.setStartDateActivePeriod( artistDTO.getStartDateActivePeriod() );
         artist.setEndDateActivePeriod( artistDTO.getEndDateActivePeriod() );
 

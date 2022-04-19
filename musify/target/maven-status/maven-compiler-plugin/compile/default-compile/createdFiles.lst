@@ -3,6 +3,7 @@ com\example\musify\mapper\AlbumMapper.class
 com\example\musify\mapper\UserMapper.class
 com\example\musify\mapper\BandMapper.class
 com\example\musify\dto\AlternativeTitleDTO.class
+com\example\musify\exceptions\RepeatedPlaylistException.class
 com\example\musify\security\PasswordEncryption.class
 com\example\musify\dto\UserDTO.class
 com\example\musify\service\SongService.class
@@ -43,6 +44,7 @@ com\example\musify\security\JWTUtils.class
 com\example\musify\service\PlaylistService.class
 com\example\musify\dto\TokenRowMapper.class
 com\example\musify\service\UserService.class
+com\example\musify\exceptions\AlbumNotFoundException.class
 com\example\musify\repo\BandRepo.class
 storage\controllers\HelloController.class
 com\example\musify\controllers\UsersController.class

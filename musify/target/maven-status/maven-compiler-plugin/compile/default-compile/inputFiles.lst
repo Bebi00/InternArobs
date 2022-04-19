@@ -31,6 +31,7 @@ C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\storage\hibernate
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\ArtistMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\InvalidUserException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\Playlist.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\RepeatedPlaylistException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\RestExceptionHandler.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\service\ArtistService.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\Band.java
@@ -38,6 +39,7 @@ C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\storage\controlle
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\PlaylistNotFoundException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\repo\UserRepo.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\repo\SongRepo.java
+C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\exceptions\AlbumNotFoundException.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\mapper\BandMapper.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\security\WebSecurity.java
 C:\Users\paul.bratian\Desktop\InternArobs\musify\src\main\java\com\example\musify\entities\AlternativeTitle.java
