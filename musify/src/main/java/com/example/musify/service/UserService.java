@@ -2,7 +2,6 @@ package com.example.musify.service;
 
 import com.example.musify.dto.PlaylistDTO;
 import com.example.musify.dto.UserDTO;
-import com.example.musify.entities.Playlist;
 import com.example.musify.entities.User;
 import com.example.musify.exceptions.InvalidUserException;
 import com.example.musify.exceptions.UnauthorizedException;
@@ -149,7 +148,7 @@ public class UserService {
     @Transactional
     public List<PlaylistDTO> getPlaylists(){
         List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepo.getById((int)userInfo.get(0)).get();
-        return playlistMapper.toDTOs(user.getPlaylists().stream().toList());
+//        User user = userRepo.getById((int)userInfo.get(0)).get();
+        return playlistMapper.toDTOs(userRepo.getPlaylists((int)userInfo.get(0)));
     }
 }

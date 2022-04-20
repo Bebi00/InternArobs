@@ -7,6 +7,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -76,6 +77,11 @@ public class JWTUtils {
     public String getToken(String header) {
         String token = header.replaceAll("Bearer ", "").trim();
         return token;
+    }
+
+    public Integer getUserId(){
+        List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return (Integer) userInfo.get(0);
     }
 
 

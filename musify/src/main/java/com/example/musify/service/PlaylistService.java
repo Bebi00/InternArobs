@@ -12,6 +12,7 @@ import com.example.musify.mapper.SongMapper;
 import com.example.musify.repo.PlaylistRepo;
 import com.example.musify.repo.SongRepo;
 import com.example.musify.repo.UserRepo;
+import com.example.musify.security.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,14 +30,16 @@ public class PlaylistService {
     private final UserRepo userRepo;
     private final SongRepo songRepo;
     private final SongMapper songMapper;
+    private final JWTUtils jwtUtils;
 
     @Autowired
-    public PlaylistService(PlaylistRepo playlistRepo, PlaylistMapper playlistMapper, UserRepo userRepo, SongRepo songRepo, SongMapper songMapper) {
+    public PlaylistService(PlaylistRepo playlistRepo, PlaylistMapper playlistMapper, UserRepo userRepo, SongRepo songRepo, SongMapper songMapper, JWTUtils jwtUtils) {
         this.playlistRepo = playlistRepo;
         this.playlistMapper = playlistMapper;
         this.userRepo = userRepo;
         this.songRepo = songRepo;
         this.songMapper = songMapper;
+        this.jwtUtils = jwtUtils;
     }
 
     @Transactional
@@ -131,15 +134,15 @@ public class PlaylistService {
         if (playlist == null) {
             throw new SongNotFoundException("Playlist with the given id was not found");
         }
-        if(playlist.getType().equals("private")){
+        if (playlist.getType().equals("private")) {
             throw new InvalidPlaylistException("A private Playlist can not be followed");
         }
-        List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepo.getById((int) userInfo.get(0)).get();
-        if(playlist.getUsers().contains(user)){
+        User user = userRepo.getById(jwtUtils.getUserId())
+                .orElseThrow(() -> new InvalidUserException("User with the given ID was not found"));
+        if (playlist.getUsers().contains(user)) {
             throw new RepeatedPlaylistException("The user already follows this playlist");
         }
-        if (!playlist.getType().equals("public")){
+        if (!playlist.getType().equals("public")) {
             throw new UnauthorizedException("The playlist is not public.");
         }
         playlist.addUser(user);
@@ -148,15 +151,15 @@ public class PlaylistService {
     }
 
     @Transactional
-    public List<SongDTO> getSongsFromPlaylist(Long playlistId){
+    public List<SongDTO> getSongsFromPlaylist(Long playlistId) {
         Playlist playlist = playlistRepo.findPlaylistById(playlistId);
         if (playlist == null) {
             throw new SongNotFoundException("Playlist with the given id was not found");
         }
         List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepo.getById((Integer) userInfo.get(0)).get();
-        if (!playlist.getType().equals("public")){
-            if ((int)user.getId() != playlist.getOwnerUser()) {
+        if (!playlist.getType().equals("public")) {
+            if ((int) user.getId() != playlist.getOwnerUser()) {
                 throw new UnauthorizedException("The playlist is not public.");
             }
         }
@@ -165,31 +168,31 @@ public class PlaylistService {
     }
 
     @Transactional
-    public List<SongDTO> changeSongOrder(Long playlistId,Long songId,Integer oldPosition,Integer newPosition){
+    public List<SongDTO> changeSongOrder(Long playlistId, Long songId, Integer oldPosition, Integer newPosition) {
         Playlist playlist = playlistRepo.findPlaylistById(playlistId);
-        Song song = songRepo.findSongById(songId);
         if (playlist == null) {
-            throw new SongNotFoundException("Playlist with the given id was not found");
+            throw new PlaylistNotFoundException("Playlist with the given id was not found");
         }
+        Song song = songRepo.findSongById(songId);
         if (song == null) {
             throw new SongNotFoundException("Song with the given id was not found");
         }
-        List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepo.getById((Integer) userInfo.get(0)).get();
-        if ((int)user.getId() != playlist.getOwnerUser()) {
+        User user = userRepo.getById(jwtUtils.getUserId())
+                .orElseThrow(() -> new InvalidUserException("User with the given ID was not found"));
+        if ((int) user.getId() != playlist.getOwnerUser()) {
             throw new UnauthorizedException("Only the owner can modify the playlist.");
         }
         LinkedList<Song> songs = new LinkedList<>(playlist.getSongs());
-        if(oldPosition < 1 || oldPosition > songs.size() || newPosition < 1 || newPosition > songs.size() ){
+        if (oldPosition < 1 || oldPosition > songs.size() || newPosition < 1 || newPosition > songs.size()) {
             throw new IllegalArgumentException("The positions of the song are not in range.");
         }
-        if(songs.get(oldPosition-1).getId() != songId){
+        if (songs.get(oldPosition - 1).getId() != songId) {
             throw new InvalidSongException("The song introduced is not in the correct position");
         }
-        if(!oldPosition.equals(newPosition)){
-            song = songs.get(oldPosition-1);
+        if (!oldPosition.equals(newPosition)) {
+            song = songs.get(oldPosition - 1);
             songs.remove(song);
-            songs.add(newPosition-1,song);
+            songs.add(newPosition - 1, song);
             playlist.setSongs(songs);
 //            playlistRepo.save(playlist);
         }

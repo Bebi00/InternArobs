@@ -1,13 +1,12 @@
 package com.example.musify.repo;
 
-import com.example.musify.dto.DAO;
-import com.example.musify.dto.TokenRowMapper;
-import com.example.musify.dto.UserDTO;
-import com.example.musify.dto.UserRowMapper;
+import com.example.musify.dto.*;
+import com.example.musify.entities.Playlist;
 import com.example.musify.entities.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+
 import javax.sql.DataSource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -118,5 +117,10 @@ public class UserRepo implements DAO<User> {
         jdbcTemplate.update(sql);
         sql = String.format("SELECT * from musify.users WHERE id='%d'",id);
         return jdbcTemplate.query(sql,new UserRowMapper()).get(0);
+    }
+
+    public List<Playlist> getPlaylists(int userId){
+        String sql = String.format("SELECT * from musify.users_playlists UP JOIN musify.playlists P ON UP.playlist_id = P.id WHERE user_id='%d'",userId);
+        return jdbcTemplate.query(sql,new PlaylistRowMapper());
     }
 }
