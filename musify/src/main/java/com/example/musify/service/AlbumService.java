@@ -2,6 +2,7 @@ package com.example.musify.service;
 
 import com.example.musify.dto.AlbumDTO;
 import com.example.musify.dto.AlbumNewDTO;
+import com.example.musify.dto.SongDTO;
 import com.example.musify.entities.Album;
 import com.example.musify.entities.Playlist;
 import com.example.musify.entities.Song;
@@ -10,6 +11,7 @@ import com.example.musify.exceptions.InvalidArtistException;
 import com.example.musify.exceptions.SongNotFoundException;
 import com.example.musify.exceptions.UnauthorizedException;
 import com.example.musify.mapper.AlbumMapper;
+import com.example.musify.mapper.SongMapper;
 import com.example.musify.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,15 +30,17 @@ public class AlbumService {
     private final ArtistRepo artistRepo;
     private final BandRepo bandRepo;
     private final PlaylistRepo playlistRepo;
+    private final SongMapper songMapper;
 
     @Autowired
-    public AlbumService(AlbumRepo albumRepo, AlbumMapper albumMapper, SongRepo songRepo, ArtistRepo artistRepo, BandRepo bandRepo, PlaylistRepo playlistRepo) {
+    public AlbumService(AlbumRepo albumRepo, AlbumMapper albumMapper, SongRepo songRepo, ArtistRepo artistRepo, BandRepo bandRepo, PlaylistRepo playlistRepo, SongMapper songMapper) {
         this.albumRepo = albumRepo;
         this.albumMapper = albumMapper;
         this.songRepo = songRepo;
         this.artistRepo = artistRepo;
         this.bandRepo = bandRepo;
         this.playlistRepo = playlistRepo;
+        this.songMapper = songMapper;
     }
 
 
@@ -123,5 +127,14 @@ public class AlbumService {
         }
         playlistRepo.save(playlist);
         return albumMapper.toDTO(album);
+    }
+
+    @Transactional
+    public List<SongDTO> getSongsFromAlbum(Long albumId){
+        Album album = albumRepo.findAlbumById(albumId);
+        if(album == null){
+            throw new AlbumNotFoundException("The Album with the given Id was not found");
+        }
+        return songMapper.toDTOs(album.getSongs());
     }
 }

@@ -1,5 +1,6 @@
 package com.example.musify.controllers;
 
+import com.example.musify.dto.AlbumDTO;
 import com.example.musify.dto.BandDTO;
 import com.example.musify.dto.BandNewDTO;
 import com.example.musify.service.BandService;
@@ -44,5 +45,10 @@ public class BandController {
     @PostMapping("/update")
     public ResponseEntity<BandDTO> updateBand(@RequestBody BandNewDTO bandDTO){
         return new ResponseEntity<>(bandService.updateById(bandDTO),HttpStatus.OK);
+    }
+
+    @GetMapping("/albums")
+    public ResponseEntity<Optional<List<AlbumDTO>>> getArtists(@RequestParam Long bandId){
+        return new ResponseEntity<>(Optional.of(bandService.getAlbums(bandId)), HttpStatus.OK   );
     }
 }

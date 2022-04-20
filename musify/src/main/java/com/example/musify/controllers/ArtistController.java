@@ -1,5 +1,6 @@
 package com.example.musify.controllers;
 
+import com.example.musify.dto.AlbumDTO;
 import com.example.musify.dto.ArtistDTO;
 import com.example.musify.service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,10 @@ public class ArtistController {
     @PostMapping("/update")
     public ResponseEntity<ArtistDTO> updateArtist(@RequestBody ArtistDTO artistDTO){
         return new ResponseEntity<>(artistService.updateById(artistDTO),HttpStatus.OK);
+    }
+
+    @GetMapping("/albums")
+    public ResponseEntity<Optional<List<AlbumDTO>>> getArtists(@RequestParam Long artistId){
+        return new ResponseEntity<>(Optional.of(artistService.getAlbums(artistId)), HttpStatus.OK   );
     }
 }

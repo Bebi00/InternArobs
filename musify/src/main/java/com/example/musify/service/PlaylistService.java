@@ -58,7 +58,9 @@ public class PlaylistService {
         String date = formatter.format(calendar.getTime());
         newPlaylist.setCreatedDate(LocalDate.parse(date));
 
+
         if (newPlaylist.getType().equals("public") || newPlaylist.getType().equals("private")) {
+            userRepo.save(user);
             return playlistMapper.toDTO(playlistRepo.save(newPlaylist));
         } else {
             throw new InvalidPlaylistException("Invalid Type of the playlist");
@@ -141,6 +143,7 @@ public class PlaylistService {
             throw new UnauthorizedException("The playlist is not public.");
         }
         playlist.addUser(user);
+        userRepo.update(user);
         return playlistMapper.toDTO(playlistRepo.save(playlist));
     }
 

@@ -118,4 +118,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(e.getMessage());
         return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ArtistNotFoundException.class)
+    protected ResponseEntity<Object> handlePlaylistNotFoundException(ArtistNotFoundException e){
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
+        log.error(e.getMessage());
+        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BandNotFoundException.class)
+    protected ResponseEntity<Object> handlePlaylistNotFoundException(BandNotFoundException e){
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
+        log.error(e.getMessage());
+        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+    }
 }

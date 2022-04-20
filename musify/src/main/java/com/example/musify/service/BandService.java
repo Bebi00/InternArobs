@@ -1,9 +1,12 @@
 package com.example.musify.service;
 
+import com.example.musify.dto.AlbumDTO;
 import com.example.musify.dto.BandDTO;
 import com.example.musify.dto.BandNewDTO;
 import com.example.musify.entities.Artist;
 import com.example.musify.entities.Band;
+import com.example.musify.exceptions.BandNotFoundException;
+import com.example.musify.mapper.AlbumMapper;
 import com.example.musify.mapper.ArtistMapper;
 import com.example.musify.mapper.BandMapper;
 import com.example.musify.repo.ArtistRepo;
@@ -21,13 +24,15 @@ public class BandService {
     private final BandMapper bandMapper;
     private final ArtistMapper artistMapper;
     private final ArtistRepo artistRepo;
+    private final AlbumMapper albumMapper;
 
     @Autowired
-    public BandService(BandRepo bandRepo, BandMapper bandMapper, ArtistMapper artistMapper, ArtistRepo artistRepo) {
+    public BandService(BandRepo bandRepo, BandMapper bandMapper, ArtistMapper artistMapper, ArtistRepo artistRepo, AlbumMapper albumMapper) {
         this.bandRepo = bandRepo;
         this.bandMapper = bandMapper;
         this.artistMapper = artistMapper;
         this.artistRepo = artistRepo;
+        this.albumMapper = albumMapper;
     }
 
 
@@ -61,5 +66,14 @@ public class BandService {
     @Transactional
     public BandDTO updateById(BandNewDTO bandDTO) {
         return saveBand(bandDTO);
+    }
+
+    @Transactional
+    public List<AlbumDTO> getAlbums(Long bandId){
+        Band band = bandRepo.findBandById(bandId);
+        if(band == null){
+            throw new BandNotFoundException("The Band with the given id was not found");
+        }
+        return albumMapper.toDTOs(band.getAlbums());
     }
 }

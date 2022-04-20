@@ -1,5 +1,6 @@
 package com.example.musify.controllers;
 
+import com.example.musify.dto.PlaylistDTO;
 import com.example.musify.dto.UserDTO;
 import com.example.musify.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,7 +34,7 @@ public class UsersController {
 
     @PostMapping("/update")
     public ResponseEntity<Optional<UserDTO>> update(@RequestBody @Valid UserDTO userDTO){
-        return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.OK);
+        return new ResponseEntity<>(Optional.of(userService.updateUser(userDTO)), HttpStatus.OK);
     }
     @PostMapping("/logout")
     public ResponseEntity<Boolean> logout(@RequestHeader(name = "Authorization") String header) { // 'Authorization: Bearer tokenString'
@@ -48,6 +50,11 @@ public class UsersController {
 
     @PostMapping("/delete")
     public ResponseEntity<Optional<UserDTO>> delete(@RequestHeader(name = "Authorization") String header) {
-        return new ResponseEntity<>(userService.deleteUser(header), HttpStatus.OK);
+        return new ResponseEntity<>(Optional.of(userService.deleteUser(header)), HttpStatus.OK);
+    }
+
+    @GetMapping("/getPlaylists")
+    public ResponseEntity<Optional<List<PlaylistDTO>>> getPlaylists(){
+        return new ResponseEntity<>(Optional.of(userService.getPlaylists()),HttpStatus.OK);
     }
 }

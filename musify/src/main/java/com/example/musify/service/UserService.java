@@ -1,10 +1,14 @@
 package com.example.musify.service;
 
+import com.example.musify.dto.PlaylistDTO;
 import com.example.musify.dto.UserDTO;
+import com.example.musify.entities.Playlist;
 import com.example.musify.entities.User;
 import com.example.musify.exceptions.InvalidUserException;
 import com.example.musify.exceptions.UnauthorizedException;
+import com.example.musify.mapper.PlaylistMapper;
 import com.example.musify.mapper.UserMapper;
+import com.example.musify.repo.PlaylistRepo;
 import com.example.musify.repo.UserRepo;
 import com.example.musify.security.JWTUtils;
 import com.example.musify.security.PasswordEncryption;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
@@ -22,16 +27,21 @@ public class UserService {
 
     private final UserRepo userRepo;
     private final UserMapper userMapper;
+    private final PlaylistMapper playlistMapper;
+    private final PlaylistRepo playlistRepo;
 
     @Autowired
     JWTUtils jwtUtils;
 
     @Autowired
-    public UserService(UserRepo userRepo, UserMapper userMapper) {
+    public UserService(UserRepo userRepo, UserMapper userMapper, PlaylistMapper playlistMapper, PlaylistRepo playlistRepo) {
         this.userRepo = userRepo;
         this.userMapper = userMapper;
+        this.playlistMapper = playlistMapper;
+        this.playlistRepo = playlistRepo;
     }
 
+    @Transactional
     public UserDTO registerUser(UserDTO userDTO) {
         User user = userMapper.toNewEntity(userDTO);
         String encryptedPass = null;
@@ -44,6 +54,7 @@ public class UserService {
         return userMapper.toDTO(userRepo.save(user));
     }
 
+    @Transactional
     public String loginUser(String email, String password) {
         Optional<User> dbUser = userRepo.getByEmail(email);
         User user2 = null;
@@ -77,23 +88,21 @@ public class UserService {
         }
     }
 
+    @Transactional
     public Boolean logoutUser(String header) {
         String token = jwtUtils.getToken(header);
         userRepo.removeToken(token);
         return true;
     }
 
+    @Transactional
     public UserDTO setAdmin(UserDTO userDTO) {
         List<Object> userInfo = (List<Object>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User newUser = null;
         if ((Integer) userInfo.get(1) == 1) {
             newUser = userRepo.setRole(userDTO, 1);
         } else {
-            try {
                 throw new UnauthorizedException("User does not have permission.");
-            } catch (UnauthorizedException e) {
-                e.printStackTrace();
-            }
         }
         return userMapper.toDTO(newUser);
     }
@@ -103,46 +112,44 @@ public class UserService {
         return null;
     }
 
+    @Transactional
     public UserDTO get(int id) {
         Optional<User> user;
         user = userRepo.getById(id);
         if (user.isPresent()) {
             return userMapper.toDTO(user.get());
         } else {
-            try {
-                throw new InvalidUserException("User was not found");
-            } catch (InvalidUserException e) {
-                e.printStackTrace();
-            }
+            throw new InvalidUserException("User was not found");
         }
-        return null;
     }
 
+    @Transactional
     public UserDTO getByEmail(String email) {
         Optional<User> user;
         user = userRepo.getByEmail(email);
         if (user.isPresent()) {
             return userMapper.toDTO(user.get());
         } else {
-            try {
-                throw new InvalidUserException("User was not found");
-            } catch (InvalidUserException e) {
-                e.printStackTrace();
-            }
+            throw new InvalidUserException("User was not found");
         }
-        return null;
     }
 
-    public Optional<UserDTO> deleteUser(String header) {
+    @Transactional
+    public UserDTO deleteUser(String header) {
         List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer id = (Integer) userInfo.get(0);
-        return Optional.of(userMapper.toDTO(userRepo.inactivateUser(id)));
+        return userMapper.toDTO(userRepo.inactivateUser(id));
     }
 
-    public Optional<UserDTO> updateUser(UserDTO userDTO) {
+    public UserDTO updateUser(UserDTO userDTO) {
         userRepo.update(userMapper.toEntity(userDTO));
-        return Optional.of(userMapper.toDTO(userRepo.getById(userDTO.getId()).get()));
+        return userMapper.toDTO(userRepo.getById(userDTO.getId()).get());
     }
 
-
+    @Transactional
+    public List<PlaylistDTO> getPlaylists(){
+        List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepo.getById((int)userInfo.get(0)).get();
+        return playlistMapper.toDTOs(user.getPlaylists().stream().toList());
+    }
 }

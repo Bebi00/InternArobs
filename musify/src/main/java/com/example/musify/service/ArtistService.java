@@ -1,7 +1,10 @@
 package com.example.musify.service;
 
+import com.example.musify.dto.AlbumDTO;
 import com.example.musify.dto.ArtistDTO;
 import com.example.musify.entities.Artist;
+import com.example.musify.exceptions.ArtistNotFoundException;
+import com.example.musify.mapper.AlbumMapper;
 import com.example.musify.mapper.ArtistMapper;
 import com.example.musify.repo.ArtistRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +17,13 @@ import java.util.List;
 public class ArtistService {
     private final ArtistRepo artistRepo;
     private final ArtistMapper artistMapper;
+    private final AlbumMapper albumMapper;
 
     @Autowired
-    public ArtistService(ArtistRepo artistRepo, ArtistMapper artistMapper) {
+    public ArtistService(ArtistRepo artistRepo, ArtistMapper artistMapper, AlbumMapper albumMapper) {
         this.artistRepo = artistRepo;
         this.artistMapper = artistMapper;
+        this.albumMapper = albumMapper;
     }
 
 
@@ -50,5 +55,14 @@ public class ArtistService {
     @Transactional
     public ArtistDTO updateById(ArtistDTO artistDTO){
        return saveArtist(artistDTO);
+    }
+
+    @Transactional
+    public List<AlbumDTO> getAlbums(Long artisId){
+            Artist artist = artistRepo.findArtistById(artisId);
+            if(artist == null){
+                throw new ArtistNotFoundException("The Artist with the given id was not found");
+            }
+            return albumMapper.toDTOs(artist.getAlbums());
     }
 }

@@ -2,6 +2,7 @@ package com.example.musify.controllers;
 
 import com.example.musify.dto.AlbumDTO;
 import com.example.musify.dto.AlbumNewDTO;
+import com.example.musify.dto.SongDTO;
 import com.example.musify.exceptions.InvalidArtistException;
 import com.example.musify.exceptions.UnauthorizedException;
 import com.example.musify.service.AlbumService;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,6 +52,11 @@ public class AlbumController {
     @PostMapping("/addToPlaylist/")
     public ResponseEntity<AlbumDTO> addToPlaylist(@RequestParam Long albumId, @RequestParam Long playlistId) throws UnauthorizedException {
         return new ResponseEntity<>(albumService.addToPlaylist(albumId, playlistId),HttpStatus.OK);
+    }
+
+    @GetMapping("/songs")
+    public ResponseEntity<Optional<List<SongDTO>>> getSongsFromAlbum(@RequestParam Long albumId){
+        return new ResponseEntity<>(Optional.of(albumService.getSongsFromAlbum(albumId)), HttpStatus.OK);
     }
 
 }

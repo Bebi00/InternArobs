@@ -33,7 +33,6 @@ public class Playlist {
   private List<Song> songs = new LinkedList<>();
 
   @ManyToMany(cascade = {
-          CascadeType.MERGE
   })
   @JoinTable(name = "users_playlists",
           joinColumns = @JoinColumn(name = "playlist_id"),
