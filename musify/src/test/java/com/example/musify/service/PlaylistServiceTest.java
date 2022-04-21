@@ -41,13 +41,15 @@ class PlaylistServiceTest {
     SongMapper songMapper;
     @Mock
     JWTUtils jwtUtils;
+    @Mock
+    RepoValidation repoValidation;
 
     PlaylistService playlistService;
 
     @BeforeEach
     public void init() {
         songMapper = new SongMapperImpl();
-        playlistService = new PlaylistService(playlistRepo, playlistMapper, userRepo, songRepo, songMapper, jwtUtils);
+        playlistService = new PlaylistService(playlistRepo, playlistMapper, userRepo, songRepo, songMapper, jwtUtils, repoValidation);
     }
 
     @Test
@@ -77,7 +79,7 @@ class PlaylistServiceTest {
         User user = new User();
         user.setId(24);
         when(jwtUtils.getUserId()).thenReturn(24L);
-        when(userRepo.getById(24)).thenReturn(Optional.of(user));
+        when(userRepo.getById(24L)).thenReturn(Optional.of(user));
         when(playlistRepo.save(any())).thenReturn(playlist);
 
         List<SongDTO> songDTOS= playlistService.changeSongOrder(10L,40L,2,1);

@@ -23,7 +23,7 @@ public class UserRepo implements DAO<User> {
     }
 
     @Override
-    public Optional<User> getById(int id) {
+    public Optional<User> getById(Long id) {
         User user = null;
         String sql = "SELECT * from musify.users WHERE id="+id;
         List<User> users = jdbcTemplate.query(sql,new UserRowMapper());

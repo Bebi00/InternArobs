@@ -1,11 +1,9 @@
 package com.example.musify.service;
 
 import com.example.musify.entities.*;
-import com.example.musify.exceptions.AlbumNotFoundException;
-import com.example.musify.exceptions.ArtistNotFoundException;
-import com.example.musify.exceptions.BandNotFoundException;
-import com.example.musify.exceptions.SongNotFoundException;
+import com.example.musify.exceptions.*;
 import com.example.musify.repo.*;
+import com.example.musify.security.JWTUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,13 +13,18 @@ public class RepoValidation {
     private final SongRepo songRepo;
     private final AlbumRepo albumRepo;
     private final PlaylistRepo playlistRepo;
+    private final UserRepo userRepo;
+    private final JWTUtils jwtUtils;
 
-    public RepoValidation(ArtistRepo artistRepo, BandRepo bandRepo, SongRepo songRepo, AlbumRepo albumRepo, PlaylistRepo playlistRepo) {
+    public RepoValidation(ArtistRepo artistRepo, BandRepo bandRepo, SongRepo songRepo, AlbumRepo albumRepo,
+                          PlaylistRepo playlistRepo, UserRepo userRepo, JWTUtils jwtUtils) {
         this.artistRepo = artistRepo;
         this.bandRepo = bandRepo;
         this.songRepo = songRepo;
         this.albumRepo = albumRepo;
         this.playlistRepo = playlistRepo;
+        this.userRepo = userRepo;
+        this.jwtUtils = jwtUtils;
     }
 
 
@@ -63,5 +66,11 @@ public class RepoValidation {
             throw new ArtistNotFoundException(String.format("The Playlist with ID = %d was not found", playlistId));
         }
         return playlist;
+    }
+
+    public User checkUser(){
+        return userRepo.getById(jwtUtils.getUserId())
+                .orElseThrow(() -> new InvalidUserException(
+                        String.format("User with the ID = %d was not found", jwtUtils.getUserId())));
     }
 }

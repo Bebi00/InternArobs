@@ -9,7 +9,7 @@ import java.util.Optional;
 @Component
 public interface DAO<T> {
 
-    Optional<User> getById(int id);
+    Optional<User> getById(Long id);
 
     Collection<T> getAll();
 
