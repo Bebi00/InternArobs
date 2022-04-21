@@ -79,9 +79,9 @@ public class JWTUtils {
         return token;
     }
 
-    public Integer getUserId(){
+    public Long getUserId(){
         List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return (Integer) userInfo.get(0);
+        return (Long) userInfo.get(0);
     }
 
 

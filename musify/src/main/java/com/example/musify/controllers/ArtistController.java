@@ -42,12 +42,12 @@ public class ArtistController {
         return new ResponseEntity<>(artistService.saveArtist(artistDTO),HttpStatus.OK);
     }
 
-    @PostMapping("/remove/{id}")
+    @DeleteMapping("/remove/{id}")
     public ResponseEntity<ArtistDTO> removeArtist(@PathVariable Long id){
         return new ResponseEntity<>(artistService.removeById(id),HttpStatus.OK);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<ArtistDTO> updateArtist(@RequestBody ArtistDTO artistDTO){
         return new ResponseEntity<>(artistService.updateById(artistDTO),HttpStatus.OK);
     }

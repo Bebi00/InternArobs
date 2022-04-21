@@ -32,7 +32,7 @@ public class UsersController {
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<Optional<UserDTO>> update(@RequestBody @Valid UserDTO userDTO){
         return new ResponseEntity<>(Optional.of(userService.updateUser(userDTO)), HttpStatus.OK);
     }
@@ -48,7 +48,7 @@ public class UsersController {
         return new ResponseEntity<>(changedUser,HttpStatus.OK);
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<Optional<UserDTO>> delete(@RequestHeader(name = "Authorization") String header) {
         return new ResponseEntity<>(Optional.of(userService.deleteUser(header)), HttpStatus.OK);
     }

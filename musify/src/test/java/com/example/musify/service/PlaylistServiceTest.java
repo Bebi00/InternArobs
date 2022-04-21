@@ -76,7 +76,7 @@ class PlaylistServiceTest {
 
         User user = new User();
         user.setId(24);
-        when(jwtUtils.getUserId()).thenReturn(24);
+        when(jwtUtils.getUserId()).thenReturn(24L);
         when(userRepo.getById(24)).thenReturn(Optional.of(user));
         when(playlistRepo.save(any())).thenReturn(playlist);
 

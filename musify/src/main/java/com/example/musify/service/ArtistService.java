@@ -54,6 +54,10 @@ public class ArtistService {
 
     @Transactional
     public ArtistDTO updateById(ArtistDTO artistDTO){
+        Artist artist = artistRepo.findArtistById(artistDTO.getId());
+        if(artist == null){
+            throw new ArtistNotFoundException("The Artist with the given ID was not found");
+        }
        return saveArtist(artistDTO);
     }
 

@@ -35,17 +35,17 @@ public class PlaylistController {
         return new ResponseEntity<>(playlistService.savePlaylist(name, type),HttpStatus.OK);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<PlaylistDTO> updatePlaylist(@RequestBody PlaylistNewDTO playlistNewDTO){
         return new ResponseEntity<>(playlistService.updatePlaylist(playlistNewDTO),HttpStatus.OK);
     }
 
-    @PostMapping("/remove/{id}")
+    @DeleteMapping("/remove/{id}")
     public ResponseEntity<PlaylistDTO> removePlaylistById(@PathVariable Long id){
         return new ResponseEntity<>(playlistService.removePlaylistById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/removeSong")
+    @DeleteMapping("/removeSong")
     public ResponseEntity<SongDTO> removePlaylistById(@RequestParam Long songId, @RequestParam Long playlistId) throws UnauthorizedException {
         return new ResponseEntity<>(playlistService.removeSongFromPlaylistById(songId, playlistId), HttpStatus.OK);
     }
@@ -60,7 +60,7 @@ public class PlaylistController {
         return new ResponseEntity<>(Optional.of(playlistService.getSongsFromPlaylist(playlistId)), HttpStatus.OK);
     }
 
-    @GetMapping("/changeSongOrder")
+    @PostMapping("/changeSongOrder")
     public ResponseEntity<Optional<List<SongDTO>>> changeSongOrder(@RequestParam Long playlistId,@RequestParam Long songId,@RequestParam Integer oldPosition,@RequestParam Integer newPosition){
         return new ResponseEntity<>(Optional.of(playlistService.changeSongOrder(playlistId,songId,oldPosition,newPosition)), HttpStatus.OK);
     }

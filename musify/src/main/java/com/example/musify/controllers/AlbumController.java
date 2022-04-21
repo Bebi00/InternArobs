@@ -39,12 +39,12 @@ public class AlbumController {
         return new ResponseEntity<>(albumService.saveAlbum(albumNewDTO),HttpStatus.OK);
     }
 
-    @PostMapping("/removeById/{id}")
+    @DeleteMapping("/removeById/{id}")
     public ResponseEntity<AlbumDTO> removeAlbumById(@PathVariable Long id){
         return new ResponseEntity<>(albumService.removeAlbumById(id),HttpStatus.OK);
     }
 
-    @PostMapping("/updateById")
+    @PutMapping("/updateById")
     public ResponseEntity<AlbumDTO> updateAlbumById(@RequestBody AlbumNewDTO albumNewDTO) throws InvalidArtistException {
         return new ResponseEntity<>(albumService.updateAlbumById(albumNewDTO),HttpStatus.OK);
     }

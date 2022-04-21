@@ -44,12 +44,12 @@ public class SongController {
         return new ResponseEntity<>(songService.saveSong(songNewDTO),HttpStatus.OK);
     }
 
-    @PostMapping("/remove/{id}")
+    @DeleteMapping("/remove/{id}")
     public ResponseEntity<SongDTO> removeSong(@PathVariable Long id){
         return new ResponseEntity<>(songService.removeById(id),HttpStatus.OK);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<SongDTO> updateSong(@RequestBody SongNewDTO songNewDTO){
         return new ResponseEntity<>(songService.updateById(songNewDTO),HttpStatus.OK);
     }
@@ -59,12 +59,12 @@ public class SongController {
         return new ResponseEntity<>(songService.saveAlternativeTitle(alternativeTitleNewDTO),HttpStatus.OK);
     }
 
-    @PostMapping("/AlternativeTitle/remove/{id}")
+    @DeleteMapping("/AlternativeTitle/remove/{id}")
     public ResponseEntity<AlternativeTitleDTO> removeAlternativeTitle(@PathVariable Long id){
         return new ResponseEntity<>(songService.removeAlternativeTitleById(id),HttpStatus.OK);
     }
 
-    @PostMapping("/AlternativeTitle/update")
+    @PutMapping("/AlternativeTitle/update")
     public ResponseEntity<AlternativeTitleDTO> updateAlternativeTitle(@RequestBody AlternativeTitleNewDTO alternativeTitleNewDTO){
         return new ResponseEntity<>(songService.updateAlternativeTitle(alternativeTitleNewDTO),HttpStatus.OK);
     }

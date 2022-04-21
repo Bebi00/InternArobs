@@ -5,6 +5,7 @@ import com.example.musify.dto.BandDTO;
 import com.example.musify.dto.BandNewDTO;
 import com.example.musify.entities.Artist;
 import com.example.musify.entities.Band;
+import com.example.musify.exceptions.ArtistNotFoundException;
 import com.example.musify.exceptions.BandNotFoundException;
 import com.example.musify.mapper.AlbumMapper;
 import com.example.musify.mapper.ArtistMapper;
@@ -50,7 +51,12 @@ public class BandService {
         bandNewDTO.getArtistsIds()
                 .stream()
                 .map(artistRepo::findArtistById)
-                .forEach(newBand::addArtist);
+                .forEach(artist -> {
+                    if (artist == null) {
+                        throw new ArtistNotFoundException("The artist with the given ID was not found");
+                    }
+                    newBand.addArtist(artist);
+                });
         return bandMapper.toDTO(bandRepo.save(newBand));
     }
 
@@ -65,13 +71,18 @@ public class BandService {
 
     @Transactional
     public BandDTO updateById(BandNewDTO bandDTO) {
+        Band band = bandRepo.findBandById(bandDTO.getId());
+        if (band == null) {
+            throw new BandNotFoundException("The Band with the given ID was not found");
+        }
+
         return saveBand(bandDTO);
     }
 
     @Transactional
-    public List<AlbumDTO> getAlbums(Long bandId){
+    public List<AlbumDTO> getAlbums(Long bandId) {
         Band band = bandRepo.findBandById(bandId);
-        if(band == null){
+        if (band == null) {
             throw new BandNotFoundException("The Band with the given id was not found");
         }
         return albumMapper.toDTOs(band.getAlbums());

@@ -37,12 +37,12 @@ public class BandController {
         return new ResponseEntity<>(bandService.saveBand(bandDTO),HttpStatus.OK);
     }
 
-    @PostMapping("/remove/{id}")
+    @DeleteMapping("/remove/{id}")
     public ResponseEntity<BandDTO> removeBand(@PathVariable Long id){
         return new ResponseEntity<>(bandService.removeById(id),HttpStatus.OK);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<BandDTO> updateBand(@RequestBody BandNewDTO bandDTO){
         return new ResponseEntity<>(bandService.updateById(bandDTO),HttpStatus.OK);
     }
