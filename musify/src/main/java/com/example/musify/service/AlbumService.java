@@ -129,5 +129,10 @@ public class AlbumService {
         return songMapper.toDTOs(album.getSongs());
     }
 
+    @Transactional
+    public List<AlbumDTO> searchAlbumsByTitleOrSongs(String searchedString){
+        return albumMapper.toDTOs(albumRepo.searchAlbumByTitleOrSong(searchedString));
+    }
+
 
 }

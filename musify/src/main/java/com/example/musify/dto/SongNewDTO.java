@@ -11,7 +11,6 @@ public class SongNewDTO {
   private String title;
   private long duration;
   private java.sql.Date creationDate;
-  private long orderInAlbum;
   private Set<Long> artistIds;
 
 
@@ -49,19 +48,6 @@ public class SongNewDTO {
   public void setCreationDate(java.sql.Date creationDate) {
     this.creationDate = creationDate;
   }
-
-
-  public long getOrderInAlbum() {
-    return orderInAlbum;
-  }
-
-  public void setOrderInAlbum(long orderInAlbum) {
-    this.orderInAlbum = orderInAlbum;
-  }
-
-//  public Set<ArtistDTO> getArtists() {
-//    return artists;
-//  }
 
 
   public Set<Long> getArtistIds() {

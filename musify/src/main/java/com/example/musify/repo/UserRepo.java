@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -53,8 +54,11 @@ public class UserRepo implements DAO<User> {
     }
 
     @Override
+    @Transactional
     public User save(User user) {
-        String sql = String.format("INSERT INTO musify.users (first_name,last_name,email,password,country_of_origin,role) VALUES ('%s','%s','%s','%s','%s',%d)",user.getFirstName(),user.getLastName(),user.getEmail(),user.getPassword(),user.getCountryOfOrigin(),0);
+        String sql = String.format("INSERT INTO musify.users (first_name,last_name,email,password,country_of_origin,role,active) " +
+                        "VALUES ('%s','%s','%s','%s','%s',%d,%d)"
+                ,user.getFirstName(),user.getLastName(),user.getEmail(),user.getPassword(),user.getCountryOfOrigin(),0,1);
         jdbcTemplate.update(sql);
         return user;
     }
@@ -79,7 +83,7 @@ public class UserRepo implements DAO<User> {
 
     }
 
-    public Integer getId(UserDTO userDTO){
+    public Long getId(UserDTO userDTO){
         String sql = String.format("SELECT * from musify.users WHERE email='%s'",userDTO.getEmail());
         User user = jdbcTemplate.query(sql,new UserRowMapper()).get(0);
         return user.getId();
@@ -91,7 +95,7 @@ public class UserRepo implements DAO<User> {
         return token;
     }
 
-    public String addToken(String token,int id, Date expiryDate){
+    public String addToken(String token,Long id, Date expiryDate){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = sdf.format(expiryDate);
         String sql = String.format("INSERT INTO musify.tokens (user_id,token,expiry_date) VALUES ('%d','%s','%s')",id,token,date);
@@ -112,14 +116,14 @@ public class UserRepo implements DAO<User> {
 
     }
 
-    public User inactivateUser(int id){
+    public User inactivateUser(Long id){
         String sql = String.format("UPDATE musify.users SET active = '%d' WHERE id='%d'",0,id);
         jdbcTemplate.update(sql);
         sql = String.format("SELECT * from musify.users WHERE id='%d'",id);
         return jdbcTemplate.query(sql,new UserRowMapper()).get(0);
     }
 
-    public List<Playlist> getPlaylists(int userId){
+    public List<Playlist> getPlaylists(Long userId){
         String sql = String.format("SELECT * from musify.users_playlists UP JOIN musify.playlists P ON UP.playlist_id = P.id WHERE user_id='%d'",userId);
         return jdbcTemplate.query(sql,new PlaylistRowMapper());
     }

@@ -2,6 +2,8 @@ package com.example.musify.controllers;
 
 import com.example.musify.dto.PlaylistDTO;
 import com.example.musify.dto.UserDTO;
+import com.example.musify.dto.UserNewDTO;
+import com.example.musify.security.JWTUtils;
 import com.example.musify.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +23,8 @@ public class UsersController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody @Valid UserDTO userDTO){
-        UserDTO user = userService.registerUser(userDTO);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<UserDTO> register(@RequestBody @Valid UserNewDTO userNewDTO){
+        return new ResponseEntity<>(userService.registerUser(userNewDTO), HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -43,14 +44,15 @@ public class UsersController {
     }
 
     @PostMapping("/setAdmin")
-    public ResponseEntity<UserDTO> setAdmin(@RequestParam int id){
+    public ResponseEntity<UserDTO> setAdmin(@RequestParam Long id){
+        JWTUtils.checkUserRoleAdmin();
         UserDTO changedUser = userService.setAdmin(userService.get(id));
         return new ResponseEntity<>(changedUser,HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Optional<UserDTO>> delete(@RequestHeader(name = "Authorization") String header) {
-        return new ResponseEntity<>(Optional.of(userService.deleteUser(header)), HttpStatus.OK);
+    public ResponseEntity<Optional<UserDTO>> delete() {
+        return new ResponseEntity<>(Optional.of(userService.deleteUser()), HttpStatus.OK);
     }
 
     @GetMapping("/getPlaylists")

@@ -2,9 +2,10 @@ package com.example.musify.service;
 
 import com.example.musify.dto.PlaylistDTO;
 import com.example.musify.dto.UserDTO;
+import com.example.musify.dto.UserNewDTO;
 import com.example.musify.entities.User;
 import com.example.musify.exceptions.InvalidUserException;
-import com.example.musify.exceptions.UnauthorizedException;
+import com.example.musify.exceptions.UserNotFoundException;
 import com.example.musify.mapper.PlaylistMapper;
 import com.example.musify.mapper.UserMapper;
 import com.example.musify.repo.PlaylistRepo;
@@ -12,14 +13,12 @@ import com.example.musify.repo.UserRepo;
 import com.example.musify.security.JWTUtils;
 import com.example.musify.security.PasswordEncryption;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -41,8 +40,8 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO registerUser(UserDTO userDTO) {
-        User user = userMapper.toNewEntity(userDTO);
+    public UserDTO registerUser(UserNewDTO userNewDTO) {
+        User user = userMapper.toNewEntity(userNewDTO);
         String encryptedPass = null;
         try {
             encryptedPass = PasswordEncryption.toHexString(PasswordEncryption.getSHA(user.getPassword()));
@@ -50,40 +49,30 @@ public class UserService {
             e.printStackTrace();
         }
         user.setPassword(encryptedPass);
-        return userMapper.toDTO(userRepo.save(user));
+        userRepo.save(user);
+        return userMapper.toDTO(userRepo.getByEmail(user.getEmail()).orElseThrow(UserNotFoundException::new));
     }
 
     @Transactional
     public String loginUser(String email, String password) {
-        Optional<User> dbUser = userRepo.getByEmail(email);
-        User user2 = null;
-        if (dbUser.isPresent()) {
-            user2 = dbUser.get();
-        } else {
-            try {
-                throw new InvalidUserException("User was not found");
-            } catch (InvalidUserException e) {
-                e.printStackTrace();
-            }
-        }
+        User dbUser = userRepo.getByEmail(email).orElseThrow(UserNotFoundException::new);
 
-        assert user2 != null;
         String encryptedPass = null;
         try {
             encryptedPass = PasswordEncryption.toHexString(PasswordEncryption.getSHA(password));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-
         assert encryptedPass != null;
-        if (encryptedPass.equals(user2.getPassword()) && user2.getActive() == 1) {
-            Object[] jwtInfo = jwtUtils.generateToken(user2.getId(), user2.getRole(), user2.getEmail());
+
+        if (encryptedPass.equals(dbUser.getPassword()) && dbUser.getActive() == 1) {
+            Object[] jwtInfo = jwtUtils.generateToken(dbUser.getId(), dbUser.getRole(), dbUser.getEmail());
             String token = jwtInfo[0].toString();
             Date expiryDate = (Date) jwtInfo[1];
-            userRepo.addToken(token, user2.getId(), expiryDate);
+            userRepo.addToken(token, dbUser.getId(), expiryDate);
             return token;
         } else {
-            throw new InvalidUserException("User not found");
+            throw new InvalidUserException("Invalid User credentials");
         }
     }
 
@@ -96,59 +85,37 @@ public class UserService {
 
     @Transactional
     public UserDTO setAdmin(UserDTO userDTO) {
-        List<Object> userInfo = (List<Object>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User newUser = null;
-        if ((Integer) userInfo.get(1) == 1) {
-            newUser = userRepo.setRole(userDTO, 1);
-        } else {
-                throw new UnauthorizedException("User does not have permission.");
-        }
-        return userMapper.toDTO(newUser);
+        User modifiedUser = userRepo.setRole(userDTO, 1);
+        return userMapper.toDTO(modifiedUser);
     }
 
     public List<UserDTO> getAll() {
-        // return userRepo.getAll();
-        return null;
+       return userMapper.toDTOs(userRepo.getAll());
     }
 
     @Transactional
-    public UserDTO get(int id) {
-        Optional<User> user;
-        user = userRepo.getById(id);
-        if (user.isPresent()) {
-            return userMapper.toDTO(user.get());
-        } else {
-            throw new InvalidUserException("User was not found");
-        }
+    public UserDTO get(Long id) {
+        return userMapper.toDTO(userRepo.getById(id).orElseThrow(UserNotFoundException::new));
     }
 
     @Transactional
     public UserDTO getByEmail(String email) {
-        Optional<User> user;
-        user = userRepo.getByEmail(email);
-        if (user.isPresent()) {
-            return userMapper.toDTO(user.get());
-        } else {
-            throw new InvalidUserException("User was not found");
-        }
+        return userMapper.toDTO(userRepo.getByEmail(email).orElseThrow(UserNotFoundException::new));
     }
 
     @Transactional
-    public UserDTO deleteUser(String header) {
-        List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Integer id = (Integer) userInfo.get(0);
-        return userMapper.toDTO(userRepo.inactivateUser(id));
+    public UserDTO deleteUser() {
+        return userMapper.toDTO(userRepo.inactivateUser(jwtUtils.getUserId()));
     }
 
+    @Transactional
     public UserDTO updateUser(UserDTO userDTO) {
         userRepo.update(userMapper.toEntity(userDTO));
-        return userMapper.toDTO(userRepo.getById(userDTO.getId()).get());
+        return userMapper.toDTO(userRepo.getById(userDTO.getId()).orElseThrow(UserNotFoundException::new));
     }
 
     @Transactional
     public List<PlaylistDTO> getPlaylists(){
-        List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        User user = userRepo.getById((int)userInfo.get(0)).get();
-        return playlistMapper.toDTOs(userRepo.getPlaylists((int)userInfo.get(0)));
+        return playlistMapper.toDTOs(userRepo.getPlaylists(jwtUtils.getUserId()));
     }
 }

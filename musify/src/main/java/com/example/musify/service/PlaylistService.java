@@ -92,6 +92,8 @@ public class PlaylistService {
     @Transactional
     public PlaylistDTO removePlaylistById(Long id) {
         Playlist oldPlaylist = repoValidation.checkPlaylist(id);
+        oldPlaylist.getSongs().forEach(oldPlaylist::removeSong);
+        oldPlaylist.getUsers().forEach(oldPlaylist::removeUser);
         playlistRepo.removePlaylistById(id);
         return playlistMapper.toDTO(oldPlaylist);
     }

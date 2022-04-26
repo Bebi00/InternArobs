@@ -18,7 +18,7 @@ public class PlaylistRowMapper implements RowMapper<Playlist> {
         String date = rs.getString("last_updated_date");
 
         Playlist playlist = new Playlist();
-        playlist.setId(rs.getLong("id"));
+        playlist.setId(rs.getLong("playlist_id"));
         playlist.setName( rs.getString("name"));
         playlist.setOwnerUser(rs.getLong("owner_user"));
         playlist.setType(rs.getString("type"));

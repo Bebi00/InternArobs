@@ -30,10 +30,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final Logger log = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
 
-     private JWTUtils jwtUtils;
-     private UserRepo userRepo;
+    private JWTUtils jwtUtils;
+    private UserRepo userRepo;
+
     @Autowired
-    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtils jwtUtils,UserRepo userRepo) {
+    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtils jwtUtils, UserRepo userRepo) {
         super(authenticationManager);
         this.jwtUtils = jwtUtils;
         this.userRepo = userRepo;
@@ -57,11 +58,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         }
         if (!userRepo.checkToken(token)) {
             chain.doFilter(req, res);
-            try {
-                throw new InvalidTokenException("Token is not valid");
-            } catch (InvalidTokenException e) {
-
-            }
+            throw new InvalidTokenException("Token is not valid");
         }
 
         UsernamePasswordAuthenticationToken authentication = getAuthentication(token);
@@ -75,7 +72,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 
         List<Object> userInfo = jwtUtils.validateToken(token);
-        Integer userId = (Integer) userInfo.get(0);
+        Long userId = (Long) userInfo.get(0);
         Integer role = (Integer) userInfo.get(1);
         String email = (String) userInfo.get(2);
 

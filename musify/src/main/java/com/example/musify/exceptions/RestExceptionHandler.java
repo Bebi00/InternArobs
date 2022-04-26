@@ -18,7 +18,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e) {
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
         log.error("Illegal Argument: " + e.getMessage());
-
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
@@ -32,21 +31,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidTokenException.class)
     protected ResponseEntity<Object> handleInvalidTokenException(InvalidTokenException e){
         ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, e.getMessage());
-        log.error("Invalid Token:"+ e.getMessage() );
+        log.error( e.getMessage() );
         return new ResponseEntity<>(apiError,HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(InvalidUserException.class)
     protected ResponseEntity<Object> handleInvalidUserException(InvalidUserException e){
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
-        log.error("User with the given id was not found.");
+        log.error(e.getMessage());
         return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidArtistException.class)
     protected ResponseEntity<Object> handleInvalidArtistException(InvalidArtistException e){
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
-        log.error("Artist with the given id was not found.");
+        log.error(e.getMessage());
         return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
     }
 
@@ -120,14 +119,20 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ArtistNotFoundException.class)
-    protected ResponseEntity<Object> handlePlaylistNotFoundException(ArtistNotFoundException e){
+    protected ResponseEntity<Object> handleArtistNotFoundException(ArtistNotFoundException e){
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
         log.error(e.getMessage());
         return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(BandNotFoundException.class)
-    protected ResponseEntity<Object> handlePlaylistNotFoundException(BandNotFoundException e){
+    protected ResponseEntity<Object> handleBandNotFoundException(BandNotFoundException e){
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
+        log.error(e.getMessage());
+        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(UserNotFoundException.class)
+    protected ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException e){
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,e.getMessage());
         log.error(e.getMessage());
         return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);

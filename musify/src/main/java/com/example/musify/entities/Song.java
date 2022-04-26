@@ -1,6 +1,7 @@
 package com.example.musify.entities;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +21,7 @@ public class Song {
     private Long duration;
 
     @Column(name = "creation_date")
-    private java.sql.Date creationDate;
+    private LocalDate creationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Album album;
@@ -95,11 +96,11 @@ public class Song {
     }
 
 
-    public java.sql.Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(java.sql.Date creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 

@@ -16,6 +16,7 @@ import com.example.musify.repo.AlternativeTitleRepo;
 import com.example.musify.repo.ArtistRepo;
 import com.example.musify.repo.PlaylistRepo;
 import com.example.musify.repo.SongRepo;
+import com.example.musify.security.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +24,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class SongService {
@@ -34,10 +38,11 @@ public class SongService {
     private final AlternativeTitleMapper alternativeTitleMapper;
     private final PlaylistRepo playlistRepo;
     private final JdbcTemplate jdbcTemplate;
+    private final JWTUtils jwtUtils;
 
 
     @Autowired
-    public SongService(SongRepo songRepo, SongMapper songMapper, ArtistRepo artistRepo, AlternativeTitleRepo alternativeTitleRepo, AlternativeTitleMapper alternativeTitleMapper, PlaylistRepo playlistRepo, JdbcTemplate jdbcTemplate) {
+    public SongService(SongRepo songRepo, SongMapper songMapper, ArtistRepo artistRepo, AlternativeTitleRepo alternativeTitleRepo, AlternativeTitleMapper alternativeTitleMapper, PlaylistRepo playlistRepo, JdbcTemplate jdbcTemplate, JWTUtils jwtUtils) {
         this.songRepo = songRepo;
         this.songMapper = songMapper;
         this.artistRepo = artistRepo;
@@ -45,6 +50,7 @@ public class SongService {
         this.alternativeTitleRepo = alternativeTitleRepo;
         this.alternativeTitleMapper = alternativeTitleMapper;
         this.jdbcTemplate = jdbcTemplate;
+        this.jwtUtils = jwtUtils;
     }
 
 
@@ -111,7 +117,7 @@ public class SongService {
         Song song = songRepo.findSongById(alternativeTitleNewDTO.getSongId());
         song.addAlternativeTitle(alternativeTitleMapper.toEntity(alternativeTitleNewDTO));
         songRepo.save(song);
-        return alternativeTitleMapper.toDTO(alternativeTitleRepo.findByAlternativeTitle(alternativeTitleNewDTO.getAlternativeTitle()));
+        return alternativeTitleMapper.toDTO(alternativeTitleRepo.findByAlternativeTitleContaining(alternativeTitleNewDTO.getAlternativeTitle()));
     }
 
     @Transactional
@@ -132,7 +138,7 @@ public class SongService {
         List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Song song = songRepo.findSongById(songId);
         Playlist playlist = playlistRepo.findPlaylistById(playlistId);
-        if(playlist.getOwnerUser() != (int) userInfo.get(0)){
+        if(!Objects.equals(playlist.getOwnerUser(), jwtUtils.getUserId())){
             throw new UnauthorizedException("Only the owner of the playlist can modify its content");
         }
         if(song == null){
@@ -146,5 +152,20 @@ public class SongService {
         playlist.addSong(song);
         songRepo.save(song);
         return songMapper.toDTO(songRepo.save(song));
+    }
+
+    @Transactional
+    public List<SongDTO> searchSongsByTitleOrAlternativeTitleOrArtist(String searchedString){
+        Set<Song> songs = new HashSet<>();
+        songs.addAll(songRepo.findSongByTitleContaining(searchedString));
+        alternativeTitleRepo.findAlternativeTitleByAlternativeTitleContaining(searchedString)
+                .forEach(alternativeTitle ->  songs.addAll(songRepo.findSongByAlternativeTitlesContains(alternativeTitle)));
+        artistRepo.findArtistsByStageNameContaining(searchedString).forEach(artist -> songs.addAll(songRepo.findSongsByArtistsContains(artist)));
+        return songMapper.toDTOs(songs.stream().toList());
+    }
+
+    @Transactional
+    public List<SongDTO> searchSongs(String searchedString){
+        return songMapper.toDTOs(songRepo.searchSongs(searchedString));
     }
 }

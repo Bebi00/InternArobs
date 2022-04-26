@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.musify.exceptions.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +35,7 @@ public class JWTUtils {
     }
 
 
-    public Object[] generateToken(Integer userId, Integer role, String email) {
+    public Object[] generateToken(Long userId, Integer role, String email) {
         Algorithm algorithm = Algorithm.HMAC256(signatureSecret);
 
         Calendar c = Calendar.getInstance();
@@ -65,7 +66,7 @@ public class JWTUtils {
 
         DecodedJWT decodedJWT = verifier.verify(jwtToken);
         List<Object> userInfo = new ArrayList<>();
-        userInfo.add(decodedJWT.getClaim("userId").asInt());
+        userInfo.add(decodedJWT.getClaim("userId").asLong());
         userInfo.add(decodedJWT.getClaim("role").asInt());
         userInfo.add(decodedJWT.getClaim("email").asString());
         userInfo.add(decodedJWT.getExpiresAt());
@@ -82,6 +83,13 @@ public class JWTUtils {
     public Long getUserId(){
         List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return (Long) userInfo.get(0);
+    }
+
+    public static void checkUserRoleAdmin(){
+        List<?> userInfo = (List<?>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if((int)userInfo.get(1) != 1){
+            throw new UnauthorizedException("Only Admin Users can perform this action");
+        }
     }
 
 

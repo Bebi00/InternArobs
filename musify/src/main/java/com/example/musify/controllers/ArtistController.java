@@ -2,6 +2,7 @@ package com.example.musify.controllers;
 
 import com.example.musify.dto.AlbumDTO;
 import com.example.musify.dto.ArtistDTO;
+import com.example.musify.security.JWTUtils;
 import com.example.musify.service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,21 +40,29 @@ public class ArtistController {
 
     @PostMapping("/add")
     public ResponseEntity<ArtistDTO> saveArtist(@RequestBody ArtistDTO artistDTO){
+        JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(artistService.saveArtist(artistDTO),HttpStatus.OK);
     }
 
     @DeleteMapping("/remove/{id}")
     public ResponseEntity<ArtistDTO> removeArtist(@PathVariable Long id){
+        JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(artistService.removeById(id),HttpStatus.OK);
     }
 
     @PutMapping("/update")
     public ResponseEntity<ArtistDTO> updateArtist(@RequestBody ArtistDTO artistDTO){
+        JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(artistService.updateById(artistDTO),HttpStatus.OK);
     }
 
     @GetMapping("/albums")
     public ResponseEntity<Optional<List<AlbumDTO>>> getArtists(@RequestParam Long artistId){
         return new ResponseEntity<>(Optional.of(artistService.getAlbums(artistId)), HttpStatus.OK   );
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Optional<List<ArtistDTO>>> searchArtists(@RequestParam String searchedString){
+        return new ResponseEntity<>(Optional.of(artistService.searchArtistsByStageNameOrBand(searchedString)), HttpStatus.OK   );
     }
 }

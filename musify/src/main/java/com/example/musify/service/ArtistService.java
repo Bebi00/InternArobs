@@ -32,7 +32,7 @@ public class ArtistService {
     }
 
     public ArtistDTO getByStageName(String stageName) {
-        return artistMapper.toDTO(artistRepo.findByStageName(stageName));
+        return artistMapper.toDTO(artistRepo.findByStageNameContaining(stageName));
     }
 
     public ArtistDTO getById(Long id) {
@@ -68,5 +68,10 @@ public class ArtistService {
                 throw new ArtistNotFoundException("The Artist with the given id was not found");
             }
             return albumMapper.toDTOs(artist.getAlbums());
+    }
+
+    @Transactional
+    public List<ArtistDTO> searchArtistsByStageNameOrBand(String searchedString){
+        return artistMapper.toDTOs(artistRepo.searchArtistsByStageNameOrBand(searchedString));
     }
 }

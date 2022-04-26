@@ -1,6 +1,7 @@
 package com.example.musify.service;
 
 import com.example.musify.dto.AlbumDTO;
+import com.example.musify.dto.ArtistDTO;
 import com.example.musify.dto.BandDTO;
 import com.example.musify.dto.BandNewDTO;
 import com.example.musify.entities.Artist;
@@ -86,5 +87,10 @@ public class BandService {
             throw new BandNotFoundException("The Band with the given id was not found");
         }
         return albumMapper.toDTOs(band.getAlbums());
+    }
+
+    @Transactional
+    public List<BandDTO> searchBandByBandNameOrArtist(String searchedString){
+        return bandMapper.toDTOs(bandRepo.searchBandByBandNameOrArtists(searchedString));
     }
 }

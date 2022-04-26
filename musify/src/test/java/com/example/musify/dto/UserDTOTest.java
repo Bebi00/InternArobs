@@ -10,7 +10,7 @@ class UserDTOTest {
 
     @Test
     public void givenValidUserDTO_whenSerializingAndDeserializing_thenResultIsTheSame() throws JsonProcessingException {
-        UserDTO userDTO = new UserDTO(1, "Paul", "Bratian", "pb@arobs.com", "pass", "RO", 0, 1);
+        UserDTO userDTO = new UserDTO(1L, "Paul", "Bratian", "pb@arobs.com", "RO", 0, 1);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String valueAsString = objectMapper.writeValueAsString(userDTO);

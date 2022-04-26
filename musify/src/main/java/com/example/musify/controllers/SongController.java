@@ -5,6 +5,7 @@ import com.example.musify.dto.AlternativeTitleNewDTO;
 import com.example.musify.dto.SongDTO;
 import com.example.musify.dto.SongNewDTO;
 import com.example.musify.exceptions.UnauthorizedException;
+import com.example.musify.security.JWTUtils;
 import com.example.musify.service.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,31 +42,37 @@ public class SongController {
 
     @PostMapping("/add")
     public ResponseEntity<SongDTO> saveSong(@RequestBody SongNewDTO songNewDTO){
+        JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(songService.saveSong(songNewDTO),HttpStatus.OK);
     }
 
     @DeleteMapping("/remove/{id}")
     public ResponseEntity<SongDTO> removeSong(@PathVariable Long id){
+        JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(songService.removeById(id),HttpStatus.OK);
     }
 
     @PutMapping("/update")
     public ResponseEntity<SongDTO> updateSong(@RequestBody SongNewDTO songNewDTO){
+        JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(songService.updateById(songNewDTO),HttpStatus.OK);
     }
 
     @PostMapping("/AlternativeTitle/add")
     public ResponseEntity<AlternativeTitleDTO> addAlternativeTitle(@RequestBody AlternativeTitleNewDTO alternativeTitleNewDTO){
+        JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(songService.saveAlternativeTitle(alternativeTitleNewDTO),HttpStatus.OK);
     }
 
     @DeleteMapping("/AlternativeTitle/remove/{id}")
     public ResponseEntity<AlternativeTitleDTO> removeAlternativeTitle(@PathVariable Long id){
+        JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(songService.removeAlternativeTitleById(id),HttpStatus.OK);
     }
 
     @PutMapping("/AlternativeTitle/update")
     public ResponseEntity<AlternativeTitleDTO> updateAlternativeTitle(@RequestBody AlternativeTitleNewDTO alternativeTitleNewDTO){
+        JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(songService.updateAlternativeTitle(alternativeTitleNewDTO),HttpStatus.OK);
     }
 
@@ -77,5 +84,10 @@ public class SongController {
     @PostMapping("/addToPlaylist/")
     public ResponseEntity<SongDTO> addToPlaylist(@RequestParam Long songId,@RequestParam Long playlistId) throws UnauthorizedException {
         return new ResponseEntity<>(songService.addToPlaylist(songId, playlistId),HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Optional<List<SongDTO>>> searchSongs(@RequestParam String searchedString){
+        return new ResponseEntity<>(Optional.of(songService.searchSongs(searchedString)),HttpStatus.OK);
     }
 }

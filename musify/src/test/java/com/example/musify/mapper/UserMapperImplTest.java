@@ -24,7 +24,7 @@ class UserMapperImplTest {
     @Test
     @DisplayName("Test if the user entity is mapped correctly to the UserDTO")
     public void givenValidUser_whenMappingToUserDTO_thenReturnCorrectValidDTO() {
-        Integer id = 24;
+        Long id = 24L;
         String firstName = "Paul";
         String lastName = "Bratian";
         String email = "pb@arobs.com";
@@ -45,6 +45,6 @@ class UserMapperImplTest {
         UserMapper userMapper = new UserMapperImpl();
         UserDTO userDTO = userMapper.toDTO(user);
 
-        assertEquals(userDTO.getPassword(), password);
+        assertEquals(userDTO.getEmail(), email);
     }
 }

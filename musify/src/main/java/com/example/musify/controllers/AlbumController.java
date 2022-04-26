@@ -5,6 +5,7 @@ import com.example.musify.dto.AlbumNewDTO;
 import com.example.musify.dto.SongDTO;
 import com.example.musify.exceptions.InvalidArtistException;
 import com.example.musify.exceptions.UnauthorizedException;
+import com.example.musify.security.JWTUtils;
 import com.example.musify.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,16 +37,19 @@ public class AlbumController {
 
     @PostMapping("/add")
     public ResponseEntity<AlbumDTO> addAlbum(@RequestBody AlbumNewDTO albumNewDTO) throws InvalidArtistException {
+        JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(albumService.saveAlbum(albumNewDTO),HttpStatus.OK);
     }
 
     @DeleteMapping("/removeById/{id}")
     public ResponseEntity<AlbumDTO> removeAlbumById(@PathVariable Long id){
+        JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(albumService.removeAlbumById(id),HttpStatus.OK);
     }
 
     @PutMapping("/updateById")
     public ResponseEntity<AlbumDTO> updateAlbumById(@RequestBody AlbumNewDTO albumNewDTO) throws InvalidArtistException {
+        JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(albumService.updateAlbumById(albumNewDTO),HttpStatus.OK);
     }
 
@@ -57,6 +61,11 @@ public class AlbumController {
     @GetMapping("/songs")
     public ResponseEntity<Optional<List<SongDTO>>> getSongsFromAlbum(@RequestParam Long albumId){
         return new ResponseEntity<>(Optional.of(albumService.getSongsFromAlbum(albumId)), HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Optional<List<AlbumDTO>>> searchAlbum(@RequestParam String searchedString){
+        return new ResponseEntity<>(Optional.of(albumService.searchAlbumsByTitleOrSongs(searchedString)), HttpStatus.OK);
     }
 
 }
