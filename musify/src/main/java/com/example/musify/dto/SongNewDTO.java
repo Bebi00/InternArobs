@@ -2,27 +2,16 @@ package com.example.musify.dto;
 
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Component
 public class SongNewDTO {
 
-  private long id;
   private String title;
   private long duration;
-  private java.sql.Date creationDate;
+  private LocalDate creationDate;
   private Set<Long> artistIds;
-
-
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
 
   public String getTitle() {
     return title;
@@ -41,11 +30,11 @@ public class SongNewDTO {
   }
 
 
-  public java.sql.Date getCreationDate() {
+  public LocalDate getCreationDate() {
     return creationDate;
   }
 
-  public void setCreationDate(java.sql.Date creationDate) {
+  public void setCreationDate(LocalDate creationDate) {
     this.creationDate = creationDate;
   }
 

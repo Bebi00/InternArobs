@@ -52,10 +52,10 @@ public class SongController {
         return new ResponseEntity<>(songService.removeById(id),HttpStatus.OK);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<SongDTO> updateSong(@RequestBody SongNewDTO songNewDTO){
+    @PutMapping("/update/{songId}")
+    public ResponseEntity<SongDTO> updateSong(@PathVariable Long songId,@RequestBody SongNewDTO songNewDTO){
         JWTUtils.checkUserRoleAdmin();
-        return new ResponseEntity<>(songService.updateById(songNewDTO),HttpStatus.OK);
+        return new ResponseEntity<>(songService.updateById(songId,songNewDTO),HttpStatus.OK);
     }
 
     @PostMapping("/AlternativeTitle/add")

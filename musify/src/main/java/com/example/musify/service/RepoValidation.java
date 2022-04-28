@@ -68,9 +68,15 @@ public class RepoValidation {
         return playlist;
     }
 
-    public User checkUser(){
+    public User checkLoggedUser(){
         return userRepo.getById(jwtUtils.getUserId())
-                .orElseThrow(() -> new InvalidUserException(
+                .orElseThrow(() -> new UserNotFoundException(
+                        String.format("User with the ID = %d was not found", jwtUtils.getUserId())));
+    }
+
+    public User checkUserById(Long userId){
+        return userRepo.getById(userId)
+                .orElseThrow(() -> new UserNotFoundException(
                         String.format("User with the ID = %d was not found", jwtUtils.getUserId())));
     }
 }

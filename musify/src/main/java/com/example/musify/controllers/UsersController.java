@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,19 +24,19 @@ public class UsersController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody @Valid UserNewDTO userNewDTO){
+    public ResponseEntity<UserDTO> register(@RequestBody @Valid UserNewDTO userNewDTO) throws NoSuchAlgorithmException {
         return new ResponseEntity<>(userService.registerUser(userNewDTO), HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email,@RequestParam String password){
+    public ResponseEntity<String> login(@RequestParam String email,@RequestParam String password) throws NoSuchAlgorithmException {
         String token = userService.loginUser(email, password);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Optional<UserDTO>> update(@RequestBody @Valid UserDTO userDTO){
-        return new ResponseEntity<>(Optional.of(userService.updateUser(userDTO)), HttpStatus.OK);
+    public ResponseEntity<Optional<UserDTO>> update(@RequestBody @Valid UserNewDTO userNewDTO) throws NoSuchAlgorithmException {
+        return new ResponseEntity<>(Optional.of(userService.updateUser(userNewDTO)), HttpStatus.OK);
     }
     @PostMapping("/logout")
     public ResponseEntity<Boolean> logout(@RequestHeader(name = "Authorization") String header) { // 'Authorization: Bearer tokenString'
@@ -46,7 +47,7 @@ public class UsersController {
     @PostMapping("/setAdmin")
     public ResponseEntity<UserDTO> setAdmin(@RequestParam Long id){
         JWTUtils.checkUserRoleAdmin();
-        UserDTO changedUser = userService.setAdmin(userService.get(id));
+        UserDTO changedUser = userService.setAdmin(id);
         return new ResponseEntity<>(changedUser,HttpStatus.OK);
     }
 

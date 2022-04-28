@@ -55,7 +55,7 @@ public class PlaylistService {
         newPlaylist.setType(type);
         newPlaylist.setName(name);
 
-        User user = repoValidation.checkUser();
+        User user = repoValidation.checkLoggedUser();
         newPlaylist.addUser(user);
         newPlaylist.setOwnerUser(user.getId());
         newPlaylist.setCreatedDate(LocalDate.now());
@@ -123,7 +123,7 @@ public class PlaylistService {
         if (playlist.getType().equals("private")) {
             throw new InvalidPlaylistException("A private Playlist can not be followed");
         }
-        User user = repoValidation.checkUser();
+        User user = repoValidation.checkLoggedUser();
         if (playlist.getUsers().contains(user)) {
             throw new RepeatedPlaylistException("The user already follows this playlist");
         }
@@ -138,7 +138,7 @@ public class PlaylistService {
     @Transactional
     public List<SongDTO> getSongsFromPlaylist(Long playlistId) {
         Playlist playlist = repoValidation.checkPlaylist(playlistId);
-        User user = repoValidation.checkUser();
+        User user = repoValidation.checkLoggedUser();
         if (!playlist.getType().equals("public")) {
             if (user.getId().equals(playlist.getOwnerUser())) {
                 throw new UnauthorizedException("The playlist is not public.");
@@ -151,7 +151,7 @@ public class PlaylistService {
     public List<SongDTO> changeSongOrder(Long playlistId, Long songId, Integer oldPosition, Integer newPosition) {
         Playlist playlist = repoValidation.checkPlaylist(playlistId);
         Song song = repoValidation.checkSong(songId);
-        User user = repoValidation.checkUser();
+        User user = repoValidation.checkLoggedUser();
         if (user.getId().equals(playlist.getOwnerUser())) {
             throw new UnauthorizedException("Only the owner can modify the playlist.");
         }

@@ -3,12 +3,12 @@ package com.example.musify.repo;
 import com.example.musify.dto.*;
 import com.example.musify.entities.Playlist;
 import com.example.musify.entities.User;
+import com.example.musify.security.JWTUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -18,9 +18,11 @@ import java.util.Optional;
 @Component
 public class UserRepo implements DAO<User> {
     private final JdbcTemplate jdbcTemplate;
+    private final JWTUtils jwtUtils;
 
-    public UserRepo(DataSource dataSource) {
+    public UserRepo(DataSource dataSource, JWTUtils jwtUtils) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -42,8 +44,7 @@ public class UserRepo implements DAO<User> {
         if (users.size() == 1){
             user = users.get(0);
         }
-        assert user != null;
-        return Optional.of(user);
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class UserRepo implements DAO<User> {
     }
 
     @Override
-    @Transactional
+
     public User save(User user) {
         String sql = String.format("INSERT INTO musify.users (first_name,last_name,email,password,country_of_origin,role,active) " +
                         "VALUES ('%s','%s','%s','%s','%s',%d,%d)"
@@ -64,23 +65,20 @@ public class UserRepo implements DAO<User> {
     }
 
     public void update(User user) {
-        String sql = String.format("UPDATE musify.users SET first_name='%s',last_name='%s',email='%s',password='%s',country_of_origin ='%s' WHERE id='%d'",user.getFirstName(),user.getLastName(),user.getEmail(),user.getPassword(),user.getCountryOfOrigin(),user.getId());
+        String sql = String.format("UPDATE musify.users SET first_name='%s',last_name='%s',email='%s',password='%s',country_of_origin ='%s'" +
+                " WHERE id='%d'",user.getFirstName(),user.getLastName(),user.getEmail(),user.getPassword(),user.getCountryOfOrigin(),jwtUtils.getUserId());
         jdbcTemplate.update(sql);
     }
 
-    public User setRole(UserDTO userDTO,int role){
-        String sql = String.format("UPDATE musify.users SET role = '%d' WHERE id='%d'",role,userDTO.getId());
+    public User setRole(Long userId,int role){
+        String sql = String.format("UPDATE musify.users SET role = '%d' WHERE id='%d'",role,userId);
         jdbcTemplate.update(sql);
-        sql = String.format("SELECT * from musify.users WHERE id='%d'",userDTO.getId());
-        User user = jdbcTemplate.query(sql,new UserRowMapper()).get(0);
-        return user;
+        sql = String.format("SELECT * from musify.users WHERE id='%d'",userId);
+        return jdbcTemplate.query(sql,new UserRowMapper()).get(0);
     }
-
-
 
     @Override
     public void delete(User user) {
-
     }
 
     public Long getId(UserDTO userDTO){
@@ -106,10 +104,10 @@ public class UserRepo implements DAO<User> {
     }
 
     public boolean checkToken(String token){
-        String sql = String.format("SELECT token FROM `musify`.`tokens` WHERE token = '%s' ",token);
+        String sql = String.format("SELECT DISTINCT token FROM `musify`.`tokens` WHERE token = '%s' ",token);
         List<String> res = jdbcTemplate.query(sql,new TokenRowMapper());
         String dbToken = null;
-        if(res.size() > 0){
+        if(res.size() == 1){
             dbToken = res.get(0);
         }
         return token.equals(dbToken);

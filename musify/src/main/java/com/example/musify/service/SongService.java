@@ -39,10 +39,11 @@ public class SongService {
     private final PlaylistRepo playlistRepo;
     private final JdbcTemplate jdbcTemplate;
     private final JWTUtils jwtUtils;
+    private final RepoValidation repoValidation;
 
 
     @Autowired
-    public SongService(SongRepo songRepo, SongMapper songMapper, ArtistRepo artistRepo, AlternativeTitleRepo alternativeTitleRepo, AlternativeTitleMapper alternativeTitleMapper, PlaylistRepo playlistRepo, JdbcTemplate jdbcTemplate, JWTUtils jwtUtils) {
+    public SongService(SongRepo songRepo, SongMapper songMapper, ArtistRepo artistRepo, AlternativeTitleRepo alternativeTitleRepo, AlternativeTitleMapper alternativeTitleMapper, PlaylistRepo playlistRepo, JdbcTemplate jdbcTemplate, JWTUtils jwtUtils, RepoValidation repoValidation) {
         this.songRepo = songRepo;
         this.songMapper = songMapper;
         this.artistRepo = artistRepo;
@@ -51,6 +52,7 @@ public class SongService {
         this.alternativeTitleMapper = alternativeTitleMapper;
         this.jdbcTemplate = jdbcTemplate;
         this.jwtUtils = jwtUtils;
+        this.repoValidation = repoValidation;
     }
 
 
@@ -65,13 +67,6 @@ public class SongService {
     public SongDTO getSongByTitle(String title) {
         return songMapper.toDTO(songRepo.findByTitle(title));
     }
-
-//    @Transactional
-//    public SongDTO saveSong(SongNewDTO songNewDTO) {
-//        Song newSong = songMapper.toEntityNew(songNewDTO);
-//        Song song = songRepo.save(newSong);
-//        return songMapper.toDTO(song);
-//    }
 
     @Transactional
     public SongDTO saveSong(SongNewDTO songNewDTO) {
@@ -93,11 +88,11 @@ public class SongService {
     }
 
     @Transactional
-    public SongDTO updateById(SongNewDTO songNewDTO) {
-        if (getById(songNewDTO.getId()) != null) {
-            return saveSong(songNewDTO);
-        }
-        throw new InvalidSongException();
+    public SongDTO updateById(Long songId,SongNewDTO songNewDTO) {
+       repoValidation.checkSong(songId);
+       Song song = songMapper.toEntityNew(songNewDTO);
+       song.setId(songId);
+       return songMapper.toDTO(songRepo.save(song));
     }
 
     public AlternativeTitleDTO getAlternativeTitleById(Long id) {

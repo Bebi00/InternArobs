@@ -2,6 +2,7 @@ package com.example.musify.dto;
 
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class UserNewDTO {
 
@@ -11,7 +12,8 @@ public class UserNewDTO {
   private String lastName;
   @NotBlank(message = "Email cannot be blank")
   private String email;
-  @NotBlank(message = "Password cannot be blank")
+
+  @Size(min = 6,message = "Password should be at least 6 characters long")
   private String password;
   private String countryOfOrigin;
 
