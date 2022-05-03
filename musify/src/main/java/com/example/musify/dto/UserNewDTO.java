@@ -15,6 +15,7 @@ public class UserNewDTO {
 
   @Size(min = 6,message = "Password should be at least 6 characters long")
   private String password;
+  @NotBlank(message = "The country of origin can not be blank")
   private String countryOfOrigin;
 
   public UserNewDTO(String firstName, String lastName, String email, String password, String countryOfOrigin) {

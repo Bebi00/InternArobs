@@ -76,8 +76,7 @@ public class JWTUtils {
     }
 
     public String getToken(String header) {
-        String token = header.replaceAll("Bearer ", "").trim();
-        return token;
+        return header.replaceAll("Bearer ", "").trim();
     }
 
     public Long getUserId(){

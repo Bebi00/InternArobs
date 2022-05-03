@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,25 +36,25 @@ public class AlbumController {
         return new ResponseEntity<>(Optional.of(albumService.getAlbumByTitle(title)), HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<AlbumDTO> addAlbum(@RequestBody AlbumNewDTO albumNewDTO) throws InvalidArtistException {
+    @PostMapping("/")
+    public ResponseEntity<AlbumDTO> addAlbum(@RequestBody @Valid AlbumNewDTO albumNewDTO) throws InvalidArtistException {
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(albumService.saveAlbum(albumNewDTO),HttpStatus.OK);
     }
 
-    @DeleteMapping("/removeById/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<AlbumDTO> removeAlbumById(@PathVariable Long id){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(albumService.removeAlbumById(id),HttpStatus.OK);
     }
 
-    @PutMapping("/updateById")
-    public ResponseEntity<AlbumDTO> updateAlbumById(@RequestBody AlbumNewDTO albumNewDTO) throws InvalidArtistException {
+    @PutMapping("/")
+    public ResponseEntity<AlbumDTO> updateAlbumById(@RequestBody @Valid AlbumNewDTO albumNewDTO) throws InvalidArtistException {
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(albumService.updateAlbumById(albumNewDTO),HttpStatus.OK);
     }
 
-    @PostMapping("/addToPlaylist/")
+    @PostMapping("/ToPlaylist/")
     public ResponseEntity<AlbumDTO> addToPlaylist(@RequestParam Long albumId, @RequestParam Long playlistId) throws UnauthorizedException {
         return new ResponseEntity<>(albumService.addToPlaylist(albumId, playlistId),HttpStatus.OK);
     }

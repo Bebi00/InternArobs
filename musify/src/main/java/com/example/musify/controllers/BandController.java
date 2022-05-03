@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,20 +34,20 @@ public class BandController {
         return new ResponseEntity<>(Optional.of(bandService.getByBandName(bandName)),HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<BandDTO> saveBand(@RequestBody BandNewDTO bandDTO){
+    @PostMapping("/")
+    public ResponseEntity<BandDTO> saveBand(@RequestBody @Valid BandNewDTO bandDTO){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(bandService.saveBand(bandDTO),HttpStatus.OK);
     }
 
-    @DeleteMapping("/remove/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<BandDTO> removeBand(@PathVariable Long id){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(bandService.removeById(id),HttpStatus.OK);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<BandDTO> updateBand(@RequestBody BandNewDTO bandDTO){
+    @PutMapping("/")
+    public ResponseEntity<BandDTO> updateBand(@RequestBody @Valid BandNewDTO bandDTO){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(bandService.updateById(bandDTO),HttpStatus.OK);
     }

@@ -1,10 +1,14 @@
 package com.example.musify.dto;
 
 
+import javax.validation.constraints.NotBlank;
+
 public class PlaylistNewDTO {
 
   private long id;
+  @NotBlank(message = "The name of the playlist can not be blank")
   private String name;
+  @NotBlank(message = "The type of the playlist can not be blank")
   private String type;
 
   public long getId() {

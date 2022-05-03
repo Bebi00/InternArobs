@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,30 +29,30 @@ public class ArtistController {
         return new ResponseEntity<>(Optional.of(artistService.getAll()), HttpStatus.OK   );
     }
 
-    @GetMapping("/byStageName{stageName}")
+    @GetMapping("/{stageName}")
     public ResponseEntity<Optional<ArtistDTO>> getArtistByStageName(@PathVariable String stageName){
         return new ResponseEntity<>(Optional.of(artistService.getByStageName(stageName)),HttpStatus.OK);
     }
 
-    @GetMapping("/byId{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Optional<ArtistDTO>> getArtistByStageName(@PathVariable Long id){
         return new ResponseEntity<>(Optional.of(artistService.getById(id)),HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ArtistDTO> saveArtist(@RequestBody ArtistDTO artistDTO){
+    @PostMapping("/")
+    public ResponseEntity<ArtistDTO> saveArtist(@RequestBody @Valid ArtistDTO artistDTO){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(artistService.saveArtist(artistDTO),HttpStatus.OK);
     }
 
-    @DeleteMapping("/remove/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ArtistDTO> removeArtist(@PathVariable Long id){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(artistService.removeById(id),HttpStatus.OK);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<ArtistDTO> updateArtist(@RequestBody ArtistDTO artistDTO){
+    @PutMapping("/")
+    public ResponseEntity<ArtistDTO> updateArtist(@RequestBody @Valid ArtistDTO artistDTO){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(artistService.updateById(artistDTO),HttpStatus.OK);
     }

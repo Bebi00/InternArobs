@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,17 +31,17 @@ public class PlaylistController {
         return new ResponseEntity<>(Optional.of(playlistService.getPlaylistById(id)), HttpStatus.OK);
     }
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<PlaylistDTO> addPlaylist(@RequestParam String name, @RequestParam String type){
         return new ResponseEntity<>(playlistService.savePlaylist(name, type),HttpStatus.OK);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<PlaylistDTO> updatePlaylist(@RequestBody PlaylistNewDTO playlistNewDTO){
+    @PutMapping("/")
+    public ResponseEntity<PlaylistDTO> updatePlaylist(@RequestBody @Valid PlaylistNewDTO playlistNewDTO){
         return new ResponseEntity<>(playlistService.updatePlaylist(playlistNewDTO),HttpStatus.OK);
     }
 
-    @DeleteMapping("/remove/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<PlaylistDTO> removePlaylistById(@PathVariable Long id){
         return new ResponseEntity<>(playlistService.removePlaylistById(id), HttpStatus.OK);
     }

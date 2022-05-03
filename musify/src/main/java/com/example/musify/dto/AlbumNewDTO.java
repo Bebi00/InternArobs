@@ -2,6 +2,8 @@ package com.example.musify.dto;
 
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -9,12 +11,19 @@ import java.util.Set;
 public class AlbumNewDTO {
 
     private long id;
+    @NotBlank(message = "The title of the album can no tbe blank")
     private String title;
+    @NotBlank(message = "The description of the album can no tbe blank")
     private String description;
+    @NotBlank(message = "The genre of the album can no tbe blank")
     private String genre;
+    @NotBlank(message = "The release date of the album can no tbe blank")
     private LocalDate releaseDate;
+    @NotBlank(message = "The label of the album can no tbe blank")
     private String label;
+    @NotEmpty(message = "The album should contain at least one song")
     private Set<Long> songIds;
+    
     private Long artistId;
     private Long bandId;
 

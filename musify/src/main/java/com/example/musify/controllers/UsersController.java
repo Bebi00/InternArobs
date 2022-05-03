@@ -34,7 +34,7 @@ public class UsersController {
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<Optional<UserDTO>> update(@RequestBody @Valid UserNewDTO userNewDTO) throws NoSuchAlgorithmException {
         return new ResponseEntity<>(Optional.of(userService.updateUser(userNewDTO)), HttpStatus.OK);
     }
@@ -51,7 +51,7 @@ public class UsersController {
         return new ResponseEntity<>(changedUser,HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<Optional<UserDTO>> delete() {
         return new ResponseEntity<>(Optional.of(userService.deleteUser()), HttpStatus.OK);
     }

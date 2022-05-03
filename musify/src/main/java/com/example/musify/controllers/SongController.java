@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,38 +41,38 @@ public class SongController {
         return new ResponseEntity<>(Optional.of(songService.getById(id)),HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<SongDTO> saveSong(@RequestBody SongNewDTO songNewDTO){
+    @PostMapping("/")
+    public ResponseEntity<SongDTO> saveSong(@RequestBody @Valid SongNewDTO songNewDTO){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(songService.saveSong(songNewDTO),HttpStatus.OK);
     }
 
-    @DeleteMapping("/remove/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<SongDTO> removeSong(@PathVariable Long id){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(songService.removeById(id),HttpStatus.OK);
     }
 
-    @PutMapping("/update/{songId}")
-    public ResponseEntity<SongDTO> updateSong(@PathVariable Long songId,@RequestBody SongNewDTO songNewDTO){
+    @PutMapping("/{songId}")
+    public ResponseEntity<SongDTO> updateSong(@PathVariable Long songId,@RequestBody @Valid SongNewDTO songNewDTO){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(songService.updateById(songId,songNewDTO),HttpStatus.OK);
     }
 
-    @PostMapping("/AlternativeTitle/add")
-    public ResponseEntity<AlternativeTitleDTO> addAlternativeTitle(@RequestBody AlternativeTitleNewDTO alternativeTitleNewDTO){
+    @PostMapping("/AlternativeTitle/")
+    public ResponseEntity<AlternativeTitleDTO> addAlternativeTitle(@RequestBody @Valid AlternativeTitleNewDTO alternativeTitleNewDTO){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(songService.saveAlternativeTitle(alternativeTitleNewDTO),HttpStatus.OK);
     }
 
-    @DeleteMapping("/AlternativeTitle/remove/{id}")
+    @DeleteMapping("/AlternativeTitle/{id}")
     public ResponseEntity<AlternativeTitleDTO> removeAlternativeTitle(@PathVariable Long id){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(songService.removeAlternativeTitleById(id),HttpStatus.OK);
     }
 
-    @PutMapping("/AlternativeTitle/update")
-    public ResponseEntity<AlternativeTitleDTO> updateAlternativeTitle(@RequestBody AlternativeTitleNewDTO alternativeTitleNewDTO){
+    @PutMapping("/AlternativeTitle/")
+    public ResponseEntity<AlternativeTitleDTO> updateAlternativeTitle(@RequestBody @Valid AlternativeTitleNewDTO alternativeTitleNewDTO){
         JWTUtils.checkUserRoleAdmin();
         return new ResponseEntity<>(songService.updateAlternativeTitle(alternativeTitleNewDTO),HttpStatus.OK);
     }
